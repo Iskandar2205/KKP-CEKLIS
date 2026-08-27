@@ -16,9 +16,16 @@ class RoleMiddleware
         }
 
 
-        if (auth()->user()->role !== $role) {
-            abort(403);
-        }
+       if (auth()->user()->role !== $role) {
+
+    dd([
+        'user'=>auth()->user()->username,
+        'role_user'=>auth()->user()->role,
+        'role_required'=>$role,
+        'url'=>$request->url()
+    ]);
+
+}
 
 
         return $next($request);

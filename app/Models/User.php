@@ -58,4 +58,10 @@ class User extends Authenticatable
     {
         return $this->role === 'pimpinan';
     }
+
+public function sessionUsers()
+{
+    return $this->hasMany(SessionUser::class);
+}
+
 }

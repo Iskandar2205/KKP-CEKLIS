@@ -8,7 +8,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
+
     use HasFactory;
+
+
 
     protected $fillable = [
 
@@ -17,5 +20,24 @@ class Product extends Model
         'jenis_produk',
 
     ];
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relasi ke Sample
+    |--------------------------------------------------------------------------
+    |
+    | Satu produk dapat memiliki banyak sample
+    |
+    */
+
+    public function samples()
+    {
+
+        return $this->hasMany(Sample::class);
+
+    }
+
 
 }

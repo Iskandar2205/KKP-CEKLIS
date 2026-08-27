@@ -24,9 +24,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-
         return view('auth.login');
-
     }
 
 
@@ -42,13 +40,13 @@ class AuthenticatedSessionController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | Validasi login
+        | Authentication
         |--------------------------------------------------------------------------
         |
-        | LoginRequest akan melakukan:
-        | - pengecekan username/email
-        | - pengecekan password
-        | - rate limit keamanan login
+        | LoginRequest melakukan:
+        | - validasi username
+        | - cek password
+        | - rate limit login
         |
         */
 
@@ -58,7 +56,7 @@ class AuthenticatedSessionController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | Regenerate session
+        | Regenerate Session
         |--------------------------------------------------------------------------
         |
         | Security:
@@ -70,15 +68,35 @@ class AuthenticatedSessionController extends Controller
 
 
 
-
-
         /*
         |--------------------------------------------------------------------------
-        | Ambil user yang sedang login
+        | Ambil user login
         |--------------------------------------------------------------------------
         */
 
         $user = Auth::user();
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Validasi user
+        |--------------------------------------------------------------------------
+        |
+        | Jika user tidak ditemukan,
+        | logout dan hentikan proses.
+        |
+        */
+
+        if (!$user) {
+
+            Auth::logout();
+
+            return redirect()
+                ->route('login');
+
+        }
+
 
 
 
@@ -89,63 +107,71 @@ class AuthenticatedSessionController extends Controller
         |--------------------------------------------------------------------------
         */
 
-
-        switch ($user->role) {
-
-
-            case 'admin':
-
-                return redirect()
-                    ->route('admin.dashboard');
+        if ($user->role === 'admin') {
 
 
+            return redirect()
+                ->route('admin.dashboard');
 
-            case 'panelis':
-
-                return redirect()
-                    ->route('panelis.dashboard');
-
-
-
-            case 'pimpinan':
-
-                return redirect()
-                    ->route('pimpinan.dashboard');
-
-
-
-            default:
-
-
-                /*
-                |--------------------------------------------------------------------------
-                | Jika role tidak dikenal
-                |--------------------------------------------------------------------------
-                |
-                | Security:
-                | user tidak boleh masuk ke halaman yang tidak memiliki izin
-                |
-                */
-
-                Auth::logout();
-
-
-                $request->session()->invalidate();
-
-
-                $request->session()->regenerateToken();
-
-
-
-                return redirect('/login')
-                    ->withErrors([
-                        'email' => 'Role pengguna tidak valid.'
-                    ]);
 
         }
 
 
+
+        if ($user->role === 'panelis') {
+
+
+            return redirect()
+                ->route('panelis.dashboard');
+
+
+        }
+
+
+
+
+        if ($user->role === 'pimpinan') {
+
+
+            return redirect()
+                ->route('pimpinan.dashboard');
+
+
+        }
+
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Role tidak valid
+        |--------------------------------------------------------------------------
+        |
+        | Security:
+        | User dengan role asing tidak boleh masuk sistem.
+        |
+        */
+
+
+        Auth::logout();
+
+
+        $request->session()->invalidate();
+
+
+        $request->session()->regenerateToken();
+
+
+
+        return redirect()
+            ->route('login')
+            ->withErrors([
+                'username' => 'Role pengguna tidak memiliki akses.'
+            ]);
+
     }
+
+
 
 
 
@@ -161,12 +187,11 @@ class AuthenticatedSessionController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | Logout user
+        | Logout
         |--------------------------------------------------------------------------
         */
 
         Auth::guard('web')->logout();
-
 
 
 
@@ -177,19 +202,19 @@ class AuthenticatedSessionController extends Controller
         |--------------------------------------------------------------------------
         |
         | Security:
-        | Menghapus seluruh session user
+        | Menghapus session lama setelah logout.
         |
         */
+
 
         $request->session()->invalidate();
 
 
 
 
-
         /*
         |--------------------------------------------------------------------------
-        | Generate CSRF token baru
+        | Generate CSRF baru
         |--------------------------------------------------------------------------
         */
 
@@ -197,9 +222,8 @@ class AuthenticatedSessionController extends Controller
 
 
 
-
-        return redirect('/login');
-
+        return redirect()
+            ->route('login');
 
     }
 
