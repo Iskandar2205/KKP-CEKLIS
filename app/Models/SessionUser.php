@@ -17,13 +17,22 @@ class SessionUser extends Model
 
     protected $fillable = [
 
+
         'test_session_id',
+
+
+        'nama',
+
 
         'user_id',
 
+
         'role',
 
+
     ];
+
+
 
 
 
@@ -46,10 +55,16 @@ class SessionUser extends Model
 
 
 
+
+
     /*
     |--------------------------------------------------------------------------
-    | Relasi ke User
+    | Relasi ke User (opsional)
     |--------------------------------------------------------------------------
+    |
+    | Dipakai untuk penyelia yang memiliki akun.
+    | Panelis manual tidak menggunakan relasi ini.
+    |
     */
 
     public function user()
@@ -61,4 +76,4 @@ class SessionUser extends Model
 
 
 
-}
+}   

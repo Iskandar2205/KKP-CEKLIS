@@ -1,212 +1,223 @@
 <x-app-layout>
 
 
-    <x-slot name="header">
+<x-slot name="header">
 
-        <h2 class="font-semibold text-xl text-gray-800">
-            Buat Sesi Pengujian
-        </h2>
+    <h2 class="font-semibold text-xl text-gray-800">
+        Buat Sesi Pengujian
+    </h2>
 
-    </x-slot>
+</x-slot>
 
 
 
 
 
-    <div class="py-12">
+<div class="py-12">
 
 
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+<div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
 
-            <div class="bg-white shadow-sm rounded-lg p-6">
+<div class="bg-white shadow-sm rounded-lg p-6">
 
 
 
-                <form action="{{ route('admin.test_sessions.store') }}"
-                      method="POST">
+<form action="{{ route('admin.test_sessions.store') }}"
+      method="POST">
 
+@csrf
 
-                    @csrf
 
 
 
 
 
 
-                    {{-- Sample --}}
+{{-- SAMPLE --}}
 
-                    <div class="mb-4">
+<div class="mb-4">
 
-                        <label class="block font-medium mb-2">
-                            Sample Pengujian
-                        </label>
+<label class="block font-medium mb-2">
+    Sample Pengujian
+</label>
 
 
-                        <select name="sample_id"
-                                class="w-full border rounded p-2">
-
-
-                            <option value="">
-                                -- Pilih Sample --
-                            </option>
-
-
-                            @foreach($samples as $sample)
-
-
-                                <option value="{{ $sample->id }}">
-
-                                    {{ $sample->product->nama_produk }}
-                                    -
-                                    {{ $sample->nomor_sample }}
-
-                                </option>
-
-
-                            @endforeach
-
-
-                        </select>
-
-
-                    </div>
-
-
-
-
-
-
-
-
-
-                    {{-- Tanggal --}}
-
-                    <div class="mb-4">
-
-
-                        <label class="block font-medium mb-2">
-                            Tanggal Pengujian
-                        </label>
-
-
-                        <input type="date"
-                               name="tanggal_pengujian"
-                               class="w-full border rounded p-2">
-
-
-                    </div>
-
-
-
-
-
-
-
-
-
-                    {{-- Status --}}
-
-                    <div class="mb-4">
-
-
-                        <label class="block font-medium mb-2">
-                            Status
-                        </label>
-
-
-                        <select name="status"
-                                class="w-full border rounded p-2">
-
-
-                            <option value="draft">
-                                Draft
-                            </option>
-
-
-                            <option value="dibuka">
-                                Dibuka
-                            </option>
-
-
-                            <option value="selesai">
-                                Selesai
-                            </option>
-
-
-                        </select>
-
-
-                    </div>
-
-
-
-
-
-
-
-
-
-                    {{-- Catatan --}}
-
-                    <div class="mb-4">
-
-
-                        <label class="block font-medium mb-2">
-                            Catatan
-                        </label>
-
-
-                        <textarea name="catatan"
-                                  rows="4"
-                                  class="w-full border rounded p-2"
-                                  placeholder="Catatan pengujian..."></textarea>
-
-
-                    </div>
-
-
-
-
-
-
-
-
-
-                {{-- PANELIS --}}
-
-<div class="mb-6">
-
-    <label class="block font-medium mb-3">
-        Pilih Panelis
-    </label>
-
-
-    <select 
-        name="panelis[]"
-        multiple
+<select name="sample_id"
         class="w-full border rounded p-2">
 
 
-        @foreach($panelis as $user)
+<option value="">
+    -- Pilih Sample --
+</option>
 
 
-            <option value="{{ $user->id }}">
+@foreach($samples as $sample)
 
-                {{ $user->name }}
+<option value="{{ $sample->id }}">
 
-            </option>
+{{ $sample->product->nama_produk }}
+-
+{{ $sample->nomor_sample }}
+
+</option>
+
+@endforeach
 
 
-        @endforeach
+</select>
+
+</div>
 
 
-    </select>
 
 
-    <p class="text-sm text-gray-500 mt-2">
-        Tekan CTRL untuk memilih lebih dari satu panelis
-    </p>
+
+
+
+
+{{-- TANGGAL --}}
+
+<div class="mb-4">
+
+<label class="block font-medium mb-2">
+    Tanggal Pengujian
+</label>
+
+
+<input type="date"
+       name="tanggal_pengujian"
+       class="w-full border rounded p-2">
+
+</div>
+
+
+
+
+
+
+
+
+{{-- STATUS --}}
+
+<div class="mb-4">
+
+<label class="block font-medium mb-2">
+    Status
+</label>
+
+
+<select name="status"
+        class="w-full border rounded p-2">
+
+
+<option value="draft">
+    Draft
+</option>
+
+
+<option value="dibuka">
+    Dibuka
+</option>
+
+
+<option value="selesai">
+    Selesai
+</option>
+
+
+</select>
+
+</div>
+
+
+
+
+
+
+
+
+{{-- CATATAN --}}
+
+<div class="mb-4">
+
+<label class="block font-medium mb-2">
+    Catatan
+</label>
+
+
+<textarea name="catatan"
+          rows="4"
+          class="w-full border rounded p-2"
+          placeholder="Catatan pengujian..."></textarea>
+
+</div>
+
+
+
+
+
+
+
+
+
+{{-- PANELIS --}}
+
+<div class="mb-6">
+
+
+<label class="block font-medium mb-3">
+    Panelis
+</label>
+
+
+
+<div id="panelis-wrapper" class="space-y-4">
+
+
+
+
+
+
+{{-- PANELIS 1 --}}
+
+<div class="panelis-row flex items-center gap-4">
+
+
+<label class="w-32 font-medium">
+    Panelis 1
+</label>
+
+
+<select name="panelis[]"
+        class="flex-1 border rounded p-2">
+
+
+<option value="">
+    -- Pilih Panelis --
+</option>
+
+
+@foreach($panelis as $user)
+
+<option value="{{ $user->id }}">
+    {{ $user->name }}
+</option>
+
+@endforeach
+
+
+</select>
+
+
+
+<button type="button"
+        onclick="hapusPanelis(this)"
+        class="bg-red-600 text-white px-3 py-2 rounded">
+
+Hapus
+
+</button>
 
 
 </div>
@@ -218,89 +229,205 @@
 
 
 
-                    {{-- Penyelia --}}
+{{-- PANELIS 2 --}}
 
-                    <div class="mb-6">
-
-
-                        <label class="block font-medium mb-2">
-
-                            Pilih Penyelia
-
-                        </label>
+<div class="panelis-row flex items-center gap-4">
 
 
-
-                        <select name="penyelia"
-
-                                class="w-full border rounded p-2">
-
-
-                            <option value="">
-                                -- Pilih Penyelia --
-                            </option>
+<label class="w-32 font-medium">
+    Panelis 2
+</label>
 
 
-
-                            @foreach($penyelia as $user)
-
-
-                                <option value="{{ $user->id }}">
-
-                                    {{ $user->name }}
-
-                                </option>
+<select name="panelis[]"
+        class="flex-1 border rounded p-2">
 
 
-                            @endforeach
+<option value="">
+    -- Pilih Panelis --
+</option>
+
+
+@foreach($panelis as $user)
+
+<option value="{{ $user->id }}">
+    {{ $user->name }}
+</option>
+
+@endforeach
+
+
+</select>
 
 
 
-                        </select>
+<button type="button"
+        onclick="hapusPanelis(this)"
+        class="bg-red-600 text-white px-3 py-2 rounded">
+
+Hapus
+
+</button>
 
 
-                    </div>
-
-
-                    <button type="submit"
-
-                            class="bg-green-600 text-white px-4 py-2 rounded">
-
-
-                        Simpan Sesi
-
-
-                    </button>
+</div>
 
 
 
 
 
-                    <a href="{{ route('admin.test_sessions.index') }}"
-
-                       class="ml-2 bg-gray-500 text-white px-4 py-2 rounded">
-
-
-                        Kembali
-
-
-                    </a>
 
 
 
+{{-- PANELIS 3 --}}
 
-                </form>
-
-
-
-            </div>
+<div class="panelis-row flex items-center gap-4">
 
 
-        </div>
+<label class="w-32 font-medium">
+    Panelis 3
+</label>
 
 
-    </div>
+<select name="panelis[]"
+        class="flex-1 border rounded p-2">
 
+
+<option value="">
+    -- Pilih Panelis --
+</option>
+
+
+@foreach($panelis as $user)
+
+<option value="{{ $user->id }}">
+    {{ $user->name }}
+</option>
+
+@endforeach
+
+
+</select>
+
+
+
+<button type="button"
+        onclick="hapusPanelis(this)"
+        class="bg-red-600 text-white px-3 py-2 rounded">
+
+Hapus
+
+</button>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+<button type="button"
+        onclick="tambahPanelis()"
+        class="mt-4 bg-blue-600 text-white px-4 py-2 rounded">
+
++ Tambah Panelis
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+{{-- PENYELIA --}}
+
+<div class="mb-6">
+
+
+<label class="block font-medium mb-2">
+    Penyelia
+</label>
+
+
+
+<select name="penyelia"
+        class="w-full border rounded p-2">
+
+
+
+<option value="5">
+
+Pak Wirsan
+
+</option>
+
+
+
+</select>
+
+
+</div>
+
+
+
+
+
+
+
+
+<button type="submit"
+
+class="bg-green-600 text-white px-4 py-2 rounded">
+
+
+Simpan Sesi
+
+
+</button>
+
+
+
+
+
+
+<a href="{{ route('admin.test_sessions.index') }}"
+
+class="ml-2 bg-gray-500 text-white px-4 py-2 rounded">
+
+
+Kembali
+
+
+</a>
+
+
+
+
+
+</form>
+
+
+
+</div>
+
+
+</div>
+
+
+</div>
 
 
 
@@ -312,7 +439,7 @@
 <script>
 
 
-let jumlahPanelis = 1;
+let jumlahPanelis = 3;
 
 
 
@@ -321,65 +448,76 @@ function tambahPanelis()
 {
 
 
-    jumlahPanelis++;
+jumlahPanelis++;
+
+
+let wrapper = document.getElementById('panelis-wrapper');
+
+
+let div = document.createElement('div');
+
+
+div.className =
+"panelis-row flex items-center gap-4";
 
 
 
-    let wrapper = document.getElementById('panelis-wrapper');
+div.innerHTML = `
+
+
+<label class="w-32 font-medium">
+
+Panelis ${jumlahPanelis}
+
+</label>
 
 
 
-    let div = document.createElement('div');
+<select name="panelis[]"
+
+class="flex-1 border rounded p-2">
+
+
+<option value="">
+-- Pilih Panelis --
+</option>
 
 
 
-    div.className = "flex gap-3 items-center mb-3 panelis-row";
+@foreach($panelis as $user)
+
+<option value="{{ $user->id }}">
+
+{{ $user->name }}
+
+</option>
+
+@endforeach
 
 
 
-    div.innerHTML = `
+</select>
 
 
-        <div class="flex-1">
-
-
-            <label class="block text-sm font-medium mb-1">
-
-                Panelis ${jumlahPanelis}
-
-            </label>
-
-
-
-            <input type="text"
-
-                   name="panelis[]"
-
-                   placeholder="Nama Panelis"
-
-                   class="w-full border rounded p-2">
-
-
-        </div>
 
 
 
 <button type="button"
 
-        onclick="hapusPanelis(this)"
+onclick="hapusPanelis(this)"
 
-        class="bg-red-600 hover:bg-red-700 text-white text-sm px-3 py-2 rounded h-10">
+class="bg-red-600 text-white px-3 py-2 rounded">
 
-    Hapus
+Hapus
 
 </button>
 
 
-    `;
+`;
 
 
 
-    wrapper.appendChild(div);
+wrapper.appendChild(div);
 
 
 }
@@ -395,11 +533,10 @@ function hapusPanelis(button)
 {
 
 
-    let row = button.closest('.panelis-row');
+let row = button.closest('.panelis-row');
 
 
-    row.remove();
-
+row.remove();
 
 
 }

@@ -5,11 +5,16 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\AssessmentTemplate;
 use Illuminate\Http\Request;
+use App\Imports\DatasetImport;
+use App\Imports\PreviewImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class ProductController extends Controller
 {
+
 
     /**
      * Menampilkan daftar produk
@@ -29,6 +34,158 @@ class ProductController extends Controller
 
 
 
+
+    /**
+     * Halaman upload template penilaian + preview Excel
+     */
+    public function dataset(Product $product)
+    {
+
+        $template = AssessmentTemplate::where(
+            'product_id',
+            $product->id
+        )->first();
+
+
+        $rows = [];
+
+
+        if($template && $template->file_template)
+        {
+
+            $path = storage_path(
+                'app/private/templates/'.$template->file_template
+            );
+
+
+           if(file_exists($path))
+{
+
+    $preview = new PreviewImport();
+
+    Excel::import(
+        $preview,
+        $path
+    );
+
+
+    $rows = $preview->rows;
+
+}
+
+        }
+
+
+        return view(
+            'admin.products.dataset',
+            compact(
+                'product',
+                'template',
+                'rows'
+            )
+        );
+
+    }
+
+
+
+
+
+    /**
+     * Upload template Excel penilaian
+     */
+    public function importDataset(
+        Request $request,
+        Product $product
+    )
+    {
+
+        $request->validate([
+
+            'file'=>[
+                'required',
+                'file',
+                'mimes:xlsx,xls'
+            ]
+
+        ]);
+
+
+
+        $file = $request->file('file');
+
+
+        $filename = time().'_'.$file->getClientOriginalName();
+
+
+
+        /*
+        Simpan file Excel
+        Laravel 12 default:
+        storage/app/private
+        */
+
+        $file->storeAs(
+            'templates',
+            $filename
+        );
+
+
+
+        /*
+        Import isi Excel ke database
+        */
+
+        Excel::import(
+            new DatasetImport($product->id),
+            $file
+        );
+
+
+
+
+
+        /*
+        Simpan informasi template
+        */
+
+        AssessmentTemplate::updateOrCreate(
+
+            [
+                'product_id'=>$product->id
+            ],
+
+            [
+                'nama_template'=>'Template Organoleptik '.$product->nama_produk,
+
+                'file_template'=>$filename
+            ]
+
+        );
+
+
+
+
+
+        return redirect()
+
+            ->route(
+                'admin.products.dataset',
+                $product->id
+            )
+
+            ->with(
+                'success',
+                'Template berhasil diupload'
+            );
+
+    }
+
+
+
+
+
+
     /**
      * Form tambah produk
      */
@@ -44,23 +201,23 @@ class ProductController extends Controller
 
 
 
+
     /**
-     * Menyimpan produk baru
+     * Simpan produk baru
      */
     public function store(Request $request)
     {
 
-
         $validated = $request->validate([
 
-            'nama_produk' => [
+            'nama_produk'=>[
                 'required',
                 'string',
                 'max:100'
             ],
 
 
-            'jenis_produk' => [
+            'jenis_produk'=>[
                 'required',
                 'string',
                 'max:100'
@@ -75,13 +232,17 @@ class ProductController extends Controller
 
 
         return redirect()
+
             ->route('admin.products.index')
+
             ->with(
                 'success',
                 'Produk berhasil ditambahkan'
             );
 
     }
+
+
 
 
 
@@ -102,6 +263,8 @@ class ProductController extends Controller
 
 
 
+
+
     /**
      * Update produk
      */
@@ -111,17 +274,16 @@ class ProductController extends Controller
     )
     {
 
-
         $validated = $request->validate([
 
-            'nama_produk' => [
+            'nama_produk'=>[
                 'required',
                 'string',
                 'max:100'
             ],
 
 
-            'jenis_produk' => [
+            'jenis_produk'=>[
                 'required',
                 'string',
                 'max:100'
@@ -136,14 +298,18 @@ class ProductController extends Controller
 
 
         return redirect()
+
             ->route('admin.products.index')
+
             ->with(
                 'success',
                 'Produk berhasil diperbarui'
             );
 
-
     }
+
+
+
 
 
 
@@ -157,8 +323,11 @@ class ProductController extends Controller
         $product->delete();
 
 
+
         return redirect()
+
             ->route('admin.products.index')
+
             ->with(
                 'success',
                 'Produk berhasil dihapus'

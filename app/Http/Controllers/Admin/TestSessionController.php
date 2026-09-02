@@ -23,6 +23,7 @@ class TestSessionController extends Controller
     public function index()
     {
 
+
         $sessions = TestSession::with('sample.product')
             ->latest()
             ->get();
@@ -34,7 +35,10 @@ class TestSessionController extends Controller
             compact('sessions')
         );
 
+
     }
+
+
 
 
 
@@ -62,6 +66,8 @@ class TestSessionController extends Controller
             ->where('status','aktif')
             ->get();
 
+
+
         return view(
 
             'admin.test_sessions.create',
@@ -69,13 +75,14 @@ class TestSessionController extends Controller
             compact(
                 'samples',
                 'panelis',
-                'penyelia',
+                'penyelia'
             )
 
         );
 
 
     }
+
 
 
 
@@ -94,25 +101,25 @@ class TestSessionController extends Controller
         $validated = $request->validate([
 
 
-            'sample_id' => [
+            'sample_id'=>[
                 'required',
                 'exists:samples,id'
             ],
 
 
-            'tanggal_pengujian' => [
+            'tanggal_pengujian'=>[
                 'required',
                 'date'
             ],
 
 
-            'status' => [
+            'status'=>[
                 'required',
                 'in:draft,dibuka,selesai'
             ],
 
 
-            'catatan' => [
+            'catatan'=>[
                 'nullable',
                 'string'
             ],
@@ -125,7 +132,9 @@ class TestSessionController extends Controller
             ],
 
 
+
             'panelis.*'=>[
+                'required',
                 'exists:users,id'
             ],
 
@@ -143,6 +152,9 @@ class TestSessionController extends Controller
 
 
 
+
+
+
         /*
         |--------------------------------------------------------------------------
         | Simpan Test Session
@@ -150,7 +162,25 @@ class TestSessionController extends Controller
         */
 
 
-        $session = TestSession::create($validated);
+        $session = TestSession::create([
+
+
+            'sample_id'=>$request->sample_id,
+
+
+            'tanggal_pengujian'=>$request->tanggal_pengujian,
+
+
+            'status'=>$request->status,
+
+
+            'catatan'=>$request->catatan,
+
+
+        ]);
+
+
+
 
 
 
@@ -165,20 +195,24 @@ class TestSessionController extends Controller
         */
 
 
-        foreach($request->panelis as $userId)
+        foreach($request->panelis as $panelisId)
         {
 
 
             $session->sessionUsers()->create([
 
-                'user_id'=>$userId,
+
+                'user_id'=>$panelisId,
+
 
                 'role'=>'panelis'
+
 
             ]);
 
 
         }
+
 
 
 
@@ -200,9 +234,12 @@ class TestSessionController extends Controller
 
             $session->sessionUsers()->create([
 
+
                 'user_id'=>$request->penyelia,
 
+
                 'role'=>'penyelia'
+
 
             ]);
 
@@ -214,13 +251,6 @@ class TestSessionController extends Controller
 
 
 
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Simpan Analis
-        |--------------------------------------------------------------------------
-        */
 
 
         return redirect()
@@ -292,13 +322,32 @@ class TestSessionController extends Controller
 
 
 
+        $panelis = User::where('role','panelis')
+            ->where('status','aktif')
+            ->get();
+
+
+
+        $penyelia = User::where('role','penyelia')
+            ->where('status','aktif')
+            ->get();
+
+
+
         return view(
 
             'admin.test_sessions.edit',
 
             compact(
+
                 'testSession',
-                'samples'
+
+                'samples',
+
+                'panelis',
+
+                'penyelia'
+
             )
 
         );
@@ -324,54 +373,27 @@ class TestSessionController extends Controller
         $validated = $request->validate([
 
 
-            'sample_id' => [
+            'sample_id'=>[
                 'required',
                 'exists:samples,id'
             ],
 
 
-            'tanggal_pengujian' => [
+            'tanggal_pengujian'=>[
                 'required',
                 'date'
             ],
 
 
-            'status' => [
+            'status'=>[
                 'required',
                 'in:draft,dibuka,selesai'
             ],
 
 
-            'catatan' => [
+            'catatan'=>[
                 'nullable',
                 'string'
-            ],
-
-
-
-            'panelis'=>[
-                'required',
-                'array'
-            ],
-
-
-
-            'panelis.*'=>[
-                'exists:users,id'
-            ],
-
-
-
-            'penyelia'=>[
-                'nullable',
-                'exists:users,id'
-            ],
-
-
-
-            'analis'=>[
-                'nullable',
-                'exists:users,id'
             ],
 
 
@@ -402,64 +424,77 @@ class TestSessionController extends Controller
 
 
 
-/**
- * Membuka sesi pengujian
- */
-public function open(TestSession $testSession)
-{
-
-
-    $testSession->update([
-
-        'status'=>'dibuka'
-
-    ]);
-
-
-
-    return redirect()
-
-        ->route('admin.test_sessions.index')
-
-        ->with(
-            'success',
-            'Sesi berhasil dibuka'
-        );
-
-
-}
 
 
 
 
 
-
-/**
- * Menyelesaikan sesi pengujian
- */
-public function finish(TestSession $testSession)
-{
-
-
-    $testSession->update([
-
-        'status'=>'selesai'
-
-    ]);
+    /**
+     * Membuka sesi
+     */
+    public function open(TestSession $testSession)
+    {
 
 
+        $testSession->update([
 
-    return redirect()
+            'status'=>'dibuka'
 
-        ->route('admin.test_sessions.index')
-
-        ->with(
-            'success',
-            'Sesi berhasil diselesaikan'
-        );
+        ]);
 
 
-}
+
+        return redirect()
+
+            ->route('admin.test_sessions.index')
+
+            ->with(
+                'success',
+                'Sesi berhasil dibuka'
+            );
+
+
+    }
+
+
+
+
+
+
+
+
+
+    /**
+     * Menyelesaikan sesi
+     */
+    public function finish(TestSession $testSession)
+    {
+
+
+        $testSession->update([
+
+            'status'=>'selesai'
+
+        ]);
+
+
+
+        return redirect()
+
+            ->route('admin.test_sessions.index')
+
+            ->with(
+                'success',
+                'Sesi berhasil diselesaikan'
+            );
+
+
+    }
+
+
+
+
+
 
 
 

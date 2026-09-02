@@ -1,215 +1,639 @@
 <x-app-layout>
 
-    <x-slot name="header">
 
-        <h2 class="font-semibold text-xl text-gray-800">
-            Master Produk
-        </h2>
+<x-slot name="header">
 
-    </x-slot>
+<div>
 
+<h2 class="text-2xl font-bold text-[#003B5C]">
+Product Database
+</h2>
 
+<p class="text-sm text-gray-500">
+Master data produk pengujian organoleptik BPPMHKP
+</p>
 
-    <div class="py-12">
+</div>
 
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+</x-slot>
 
 
-            <div class="bg-white shadow-sm rounded-lg p-6">
 
 
-                {{-- Header --}}
-                <div class="flex justify-between items-center mb-6">
 
+<div class="min-h-screen bg-[#F2FAFC] py-10">
 
-                    <h3 class="text-lg font-bold text-gray-800">
-                        Daftar Produk
-                    </h3>
 
+<div class="max-w-7xl mx-auto px-6">
 
 
-                    <a href="{{ route('admin.products.create') }}"
-                       class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
 
-                        + Tambah Produk
 
-                    </a>
 
 
-                </div>
 
+{{-- HEADER PANEL --}}
 
 
+<div class="
+bg-gradient-to-r
+from-[#003B5C]
+to-[#0077B6]
+rounded-3xl
+p-8
+text-white
+shadow-lg
+mb-8
+relative
+overflow-hidden
+">
 
 
-                {{-- Notifikasi --}}
-                @if(session('success'))
 
-                    <div class="mb-4 p-3 bg-green-100 text-green-700 rounded-lg">
+<div class="relative z-10">
 
-                        {{ session('success') }}
 
-                    </div>
+<p class="
+text-xs
+uppercase
+tracking-[0.3em]
+text-blue-200
+">
 
-                @endif
+MASTER DATA
 
+</p>
 
 
 
+<h1 class="
+text-4xl
+font-bold
+mt-3
+">
 
-                <table class="w-full border-collapse border">
+Produk Kelautan
 
+</h1>
 
-                    <thead>
 
-                        <tr class="bg-gray-100">
 
+<p class="
+mt-3
+text-blue-100
+max-w-xl
+">
 
-                            <th class="border p-3">
-                                No
-                            </th>
+Kelola daftar produk hasil kelautan
+yang digunakan dalam proses pengujian mutu.
 
+</p>
 
-                            <th class="border p-3">
-                                Nama Produk
-                            </th>
 
 
-                            <th class="border p-3">
-                                Jenis Produk
-                            </th>
+</div>
 
 
-                            <th class="border p-3">
-                                Aksi
-                            </th>
 
 
-                        </tr>
 
+<div class="
+absolute
+right-10
+bottom-5
+opacity-20
+">
 
-                    </thead>
+<svg width="180" height="100">
 
+<path 
+d="M0 60 Q50 20 100 60 T200 60"
+stroke="white"
+stroke-width="4"
+fill="none"/>
 
+</svg>
 
 
+</div>
 
-                    <tbody>
 
 
-                    @forelse($products as $product)
+</div>
 
 
-                        <tr>
 
 
-                            <td class="border p-3 text-center">
 
-                                {{ $loop->iteration }}
 
-                            </td>
 
 
 
-                            <td class="border p-3">
+{{-- SUMMARY --}}
 
-                                {{ $product->nama_produk }}
 
-                            </td>
+<div class="
+grid
+grid-cols-1
+md:grid-cols-3
+gap-6
+mb-8
+">
 
 
 
 
-                            <td class="border p-3">
 
-                                {{ $product->jenis_produk }}
+<div class="
+bg-white
+rounded-3xl
+p-6
+shadow-sm
+">
 
-                            </td>
 
+<p class="
+text-sm
+text-gray-400
+uppercase
+">
 
+Total Produk
 
+</p>
 
 
-                            <td class="border p-3 text-center">
+<h1 class="
+text-5xl
+font-bold
+text-[#003B5C]
+mt-3
+">
 
+{{ $products->count() }}
 
-                                <a href="{{ route('admin.products.edit',$product->id) }}"
-                                   class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">
+</h1>
 
-                                    Edit
 
-                                </a>
+<p class="
+text-sm
+text-gray-500
+mt-2
+">
 
+Produk terdaftar
 
+</p>
 
 
+</div>
 
-                                <form action="{{ route('admin.products.destroy',$product->id) }}"
-                                      method="POST"
-                                      class="inline">
 
 
-                                    @csrf
 
-                                    @method('DELETE')
+<div class="
+bg-white
+rounded-3xl
+p-6
+shadow-sm
+">
 
 
+<p class="
+text-sm
+text-gray-400
+uppercase
+">
 
-                                    <button type="submit"
+Kategori
 
-                                    onclick="return confirm('Yakin ingin menghapus produk ini?')"
+</p>
 
-                                    class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
 
-                                        Hapus
+<h1 class="
+text-5xl
+font-bold
+text-[#003B5C]
+mt-3
+">
 
-                                    </button>
+{{ $products->unique('jenis_produk')->count() }}
 
+</h1>
 
-                                </form>
 
+<p class="
+text-sm
+text-gray-500
+mt-2
+">
 
+Jenis produk
 
-                            </td>
+</p>
 
 
-                        </tr>
+</div>
 
 
 
-                    @empty
+<div class="
+bg-[#003B5C]
+rounded-3xl
+p-6
+text-white
+">
 
 
-                        <tr>
+<p class="
+text-sm
+text-blue-200
+uppercase
+">
 
-                            <td colspan="4"
-                                class="border p-5 text-center text-gray-500">
+Action
 
-                                Belum ada data produk
+</p>
 
-                            </td>
 
-                        </tr>
+<a href="{{route('admin.products.create')}}"
+class="
+inline-block
+mt-5
+bg-[#F7941D]
+px-6
+py-3
+rounded-xl
+font-semibold
+hover:bg-orange-500
+transition
+">
 
++ Tambah Produk
 
-                    @endforelse
+</a>
 
 
+</div>
 
-                    </tbody>
 
 
-                </table>
 
 
 
-            </div>
+</div>
 
 
-        </div>
 
 
-    </div>
+
+
+
+
+
+{{-- TABLE --}}
+
+
+<div class="
+bg-white
+rounded-3xl
+shadow-sm
+p-8
+">
+
+
+
+<div class="
+flex
+justify-between
+items-center
+mb-6
+">
+
+
+<h2 class="
+text-xl
+font-bold
+text-[#003B5C]
+">
+
+Daftar Produk
+
+</h2>
+
+
+<span class="
+text-xs
+text-gray-400
+">
+
+Product Repository
+
+</span>
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class="overflow-x-auto">
+
+
+<table class="
+w-full
+border-collapse
+">
+
+
+
+<thead>
+
+
+<tr class="
+bg-[#003B5C]
+text-white
+text-sm
+">
+
+
+<th class="
+px-5
+py-4
+text-left
+rounded-l-xl
+">
+
+No
+
+</th>
+
+
+<th class="
+px-5
+py-4
+text-left
+">
+
+Nama Produk
+
+</th>
+
+
+<th class="
+px-5
+py-4
+text-left
+">
+
+Jenis Produk
+
+</th>
+
+
+<th class="
+px-5
+py-4
+text-center
+rounded-r-xl
+">
+
+Aksi
+
+</th>
+
+
+</tr>
+
+
+</thead>
+
+
+
+
+
+
+<tbody>
+
+
+
+@forelse($products as $index=>$product)
+
+
+
+<tr class="
+border-b
+hover:bg-[#F2FAFC]
+transition
+">
+
+
+
+<td class="
+px-5
+py-4
+text-gray-600
+">
+
+{{ $index+1 }}
+
+</td>
+
+
+
+
+<td class="
+px-5
+py-4
+font-semibold
+text-[#003B5C]
+">
+
+
+{{ $product->nama_produk }}
+
+
+</td>
+
+
+
+
+
+<td class="
+px-5
+py-4
+">
+
+
+<span class="
+bg-[#E7F7FA]
+text-[#0077B6]
+px-4
+py-2
+rounded-full
+text-sm
+">
+
+{{ $product->jenis_produk }}
+
+</span>
+
+
+</td>
+
+
+<td class="
+px-5
+py-4
+text-center
+">
+
+
+<div class="flex justify-center gap-2">
+
+
+
+<a href="{{ route('admin.products.dataset', $product->id) }}"
+
+class="
+bg-[#0077B6]
+text-white
+px-3
+py-2
+rounded-lg
+text-sm
+hover:bg-[#005B8A]
+transition
+"
+class="btn btn-primary">
+>
+
+
+
+Dataset
+
+</a>
+
+
+<a href="{{ route('admin.products.edit',$product->id) }}"
+
+class="
+bg-[#00A896]
+text-white
+px-3
+py-2
+rounded-lg
+text-sm
+hover:bg-green-600
+transition
+">
+
+Edit
+
+</a>
+
+
+
+
+
+<form action="{{route('admin.products.destroy',$product)}}"
+
+method="POST">
+
+
+@csrf
+
+@method('DELETE')
+
+
+<button
+
+onclick="return confirm('Hapus produk ini?')"
+
+class="
+bg-red-500
+text-white
+px-3
+py-2
+rounded-lg
+text-sm
+hover:bg-red-600
+transition
+">
+
+Hapus
+
+</button>
+
+
+</form>
+
+
+
+</div>
+
+
+</td>
+
+
+
+</tr>
+
+
+
+
+@empty
+
+
+<tr>
+
+<td colspan="4"
+class="
+text-center
+py-10
+text-gray-400
+">
+
+Belum ada data produk
+
+</td>
+
+</tr>
+
+
+@endforelse
+
+
+
+
+
+</tbody>
+
+
+
+</table>
+
+
+</div>
+
+
+
+
+</div>
+
+
+
+
+
+
+
+</div>
+
+</div>
 
 
 </x-app-layout>

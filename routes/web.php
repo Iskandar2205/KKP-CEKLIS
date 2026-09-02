@@ -11,6 +11,9 @@ use App\Http\Controllers\Admin\SampleController;
 use App\Http\Controllers\Admin\TestSessionController;
 use App\Http\Controllers\Admin\CriteriaOptionController;
 use App\Http\Controllers\Panelis\AssessmentController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\TemplateController;
+
 
 
 use App\Http\Controllers\Panelis\DashboardController as PanelisDashboardController;
@@ -64,8 +67,24 @@ Route::middleware(['auth', 'role:admin'])
 
 
 
+        Route::resource(
+    'users',
+    UserController::class
+        );
+
+    Route::get(
+    'products/{product}/dataset',
+    [ProductController::class,'dataset']
+)
+->name('products.dataset');
 
 
+Route::post(
+    'products/{product}/dataset',
+    [ProductController::class,'importDataset']
+)
+->name('products.dataset.import');
+        
 
         /*
         |--------------------------------------------------------------------------
@@ -80,6 +99,8 @@ Route::middleware(['auth', 'role:admin'])
             ProductController::class
 
         );
+
+        
 
 
 
@@ -100,12 +121,6 @@ Route::middleware(['auth', 'role:admin'])
             SampleController::class
 
         );
-
-
-
-
-
-
 
 
         /*
@@ -172,14 +187,36 @@ Route::post(
 
 
 
+    /*
+|--------------------------------------------------------------------------
+| Template Penilaian Excel
+|--------------------------------------------------------------------------
+*/
+
+
+Route::get(
+    'templates',
+    [TemplateController::class,'index']
+)
+->name('templates.index');
+
+
+Route::post(
+    'templates/import',
+    [TemplateController::class,'import']
+)
+->name('templates.import');
+
+
+Route::get(
+    'templates/download',
+    [TemplateController::class,'download']
+)
+->name('templates.download');
+
+
+
     });
-
-
-
-
-
-
-
 
 
 /*
@@ -189,53 +226,58 @@ Route::post(
 */
 
 Route::middleware(['auth', 'role:panelis'])
-
-->group(function () {
-
-
-
-    Route::get('/panelis/dashboard',
-
-        [PanelisDashboardController::class, 'index']
-
-    )
-
-    ->name('panelis.dashboard');
+    ->prefix('panelis')
+    ->name('panelis.')
+    ->group(function () {
 
 
-    Route::get(
+        /*
+        |--------------------------------------------------------------------------
+        | Dashboard Panelis
+        |--------------------------------------------------------------------------
+        */
 
-    '/panelis/assessment/{testSession}',
+        Route::get('/dashboard',
 
-    [AssessmentController::class,'create']
+            [PanelisDashboardController::class, 'index']
 
-)
-->name('panelis.assessment.create');
+        )
+        ->name('dashboard');
 
 
 
 
 
-Route::post(
+        /*
+        |--------------------------------------------------------------------------
+        | Penilaian Organoleptik
+        |--------------------------------------------------------------------------
+        */
 
-    '/panelis/assessment/{testSession}',
 
-    [AssessmentController::class,'store']
+        Route::get(
+            
+            '/assessment/{testSession}',
 
-)
-->name('panelis.assessment.store');
+            [AssessmentController::class,'create']
+
+        )
+        ->name('assessment.create');
+
+
+
+
+        Route::post(
+
+            '/assessment/{testSession}',
+
+            [AssessmentController::class,'store']
+
+        )
+        ->name('assessment.store');
 
 
 });
-
-
-
-
-
-
-
-
-
 /*
 |--------------------------------------------------------------------------
 | Pimpinan Area

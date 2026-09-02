@@ -2,35 +2,41 @@
 
 namespace App\Models;
 
-
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-
-
 
 class Criteria extends Model
 {
 
-    use HasFactory;
-
+    protected $table = 'criteria';
 
 
     protected $fillable = [
 
+        'assessment_section_id',
         'nama_kriteria',
+        'tahap',
+        'urutan'
 
     ];
 
 
 
-    public function assessmentDetails()
+    public function assessmentSection()
     {
-
-        return $this->hasMany(
-            AssessmentDetail::class
+        return $this->belongsTo(
+            AssessmentSection::class,
+            'assessment_section_id'
         );
-
     }
 
+
+
+    public function options()
+    {
+        return $this->hasMany(
+            CriteriaOption::class,
+            'criteria_id'
+        );
+    }
 
 }

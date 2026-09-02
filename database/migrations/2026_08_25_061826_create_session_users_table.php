@@ -24,7 +24,6 @@ return new class extends Migration
             |--------------------------------------------------------------------------
             */
 
-
             $table->foreignId('test_session_id')
                   ->constrained()
                   ->cascadeOnDelete();
@@ -32,16 +31,41 @@ return new class extends Migration
 
 
 
+
             /*
             |--------------------------------------------------------------------------
-            | Relasi User
+            | Nama User Dalam Pengujian
             |--------------------------------------------------------------------------
+            |
+            | Panelis manual masuk ke sini
+            | Contoh:
+            | Ahmad
+            | Budi
+            |
             */
 
+            $table->string('nama');
+
+
+
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Relasi User (Opsional)
+            |--------------------------------------------------------------------------
+            |
+            | Dipakai untuk penyelia
+            | Panelis manual = null
+            |
+            */
 
             $table->foreignId('user_id')
+                  ->nullable()
                   ->constrained()
-                  ->cascadeOnDelete();
+                  ->nullOnDelete();
+
+
 
 
 
@@ -49,15 +73,9 @@ return new class extends Migration
 
             /*
             |--------------------------------------------------------------------------
-            | Peran user dalam sesi
+            | Peran dalam sesi
             |--------------------------------------------------------------------------
-            |
-            | panelis
-            | penyelia
-            | analis
-            |
             */
-
 
             $table->enum('role',[
 

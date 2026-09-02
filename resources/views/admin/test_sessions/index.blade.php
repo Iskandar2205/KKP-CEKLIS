@@ -1,385 +1,736 @@
 <x-app-layout>
 
 
-    <x-slot name="header">
+<x-slot name="header">
 
-        <h2 class="font-semibold text-xl text-gray-800">
-            Sesi Pengujian
-        </h2>
+<div class="flex justify-between items-center">
 
-    </x-slot>
+<div>
 
+<h2 class="text-2xl font-bold text-[#003B5C]">
+Testing Workflow Center
+</h2>
 
+<p class="text-sm text-gray-500">
+Monitoring proses pengujian organoleptik BPPMHKP
+</p>
 
+</div>
 
+</div>
 
-    <div class="py-12">
+</x-slot>
 
 
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
 
-            <div class="bg-white shadow-sm rounded-lg p-6">
 
+<div class="min-h-screen bg-[#F4FAFC] py-10">
 
 
+<div class="max-w-7xl mx-auto px-6">
 
 
-                <div class="flex justify-between items-center mb-6">
 
 
-                    <h3 class="text-lg font-bold">
 
-                        Daftar Pengujian
+{{-- TITLE + ACTION --}}
 
-                    </h3>
+<div class="
+mb-10
+flex
+justify-between
+items-center
+">
 
 
+<div>
 
 
-                    <a href="{{ route('admin.test_sessions.create') }}"
+<h1 class="
+text-3xl
+font-bold
+text-[#003B5C]
+">
 
-                       class="bg-blue-600 hover:bg-blue-700 
-                       text-white px-4 py-2 rounded-lg">
+Laboratory Testing Workflow
 
-                        + Buat Pengujian
+</h1>
 
-                    </a>
 
+<p class="
+text-gray-500
+mt-2
+">
 
-                </div>
+Kelola perjalanan pengujian dari sampel,
+panelis hingga hasil akhir.
 
+</p>
 
 
+</div>
 
 
 
-                @if(session('success'))
 
-                    <div class="mb-4 p-3 bg-green-100 text-green-700 rounded">
 
-                        {{ session('success') }}
+<a href="{{route('admin.test_sessions.create')}}"
 
-                    </div>
+class="
+bg-[#F7941D]
+text-white
+px-6
+py-3
+rounded-xl
+font-semibold
+shadow-md
+hover:bg-orange-500
+transition
+flex
+items-center
+gap-2
+">
 
-                @endif
 
+<span class="text-xl">
++
+</span>
 
 
+Buat Pengujian
 
 
+</a>
 
 
-                <table class="w-full border-collapse border">
+</div>
 
 
-                    <thead>
 
 
-                        <tr class="bg-gray-100">
 
 
-                            <th class="border p-3">
-                                No
-                            </th>
 
 
-                            <th class="border p-3">
-                                Produk
-                            </th>
 
+{{-- STATUS WORKFLOW --}}
 
-                            <th class="border p-3">
-                                Sample
-                            </th>
 
+<div class="
+grid
+grid-cols-1
+md:grid-cols-3
+gap-6
+mb-10
+">
 
-                            <th class="border p-3">
-                                Tanggal
-                            </th>
 
 
-                            <th class="border p-3">
-                                Status
-                            </th>
+<div class="
+bg-white
+rounded-3xl
+p-6
+border-l-8
+border-[#0077B6]
+shadow-sm
+">
 
 
-                            <th class="border p-3">
-                                Aksi
-                            </th>
+<p class="text-gray-400 text-sm uppercase">
+Draft
+</p>
 
 
-                        </tr>
+<h1 class="
+text-5xl
+font-bold
+text-[#003B5C]
+mt-3
+">
 
+{{ $sessions->where('status','draft')->count() }}
 
-                    </thead>
+</h1>
 
 
+<p class="text-gray-500 mt-2">
+Persiapan pengujian
+</p>
 
 
+</div>
 
-                    <tbody>
 
 
-                    @forelse($sessions as $session)
 
 
-                        <tr>
 
 
-                            <td class="border p-3 text-center">
 
-                                {{ $loop->iteration }}
+<div class="
+bg-white
+rounded-3xl
+p-6
+border-l-8
+border-[#00A896]
+shadow-sm
+">
 
-                            </td>
 
+<p class="text-gray-400 text-sm uppercase">
+Active Test
+</p>
 
 
+<h1 class="
+text-5xl
+font-bold
+text-[#00A896]
+mt-3
+">
 
+{{ $sessions->where('status','dibuka')->count() }}
 
-                            <td class="border p-3">
+</h1>
 
-                                {{ $session->sample->product->nama_produk ?? '-' }}
 
-                            </td>
+<p class="text-gray-500 mt-2">
+Sedang berjalan
+</p>
 
 
+</div>
 
 
 
-                            <td class="border p-3">
 
-                                {{ $session->sample->nomor_sample ?? '-' }}
 
-                            </td>
 
 
 
+<div class="
+bg-[#003B5C]
+rounded-3xl
+p-6
+text-white
+">
 
 
-                            <td class="border p-3">
+<p class="text-blue-200 text-sm uppercase">
+Completed
+</p>
 
-                                {{ \Carbon\Carbon::parse($session->tanggal_pengujian)->format('d-m-Y') }}
 
-                            </td>
+<h1 class="
+text-5xl
+font-bold
+mt-3
+">
 
+{{ $sessions->where('status','selesai')->count() }}
 
+</h1>
 
 
+<p class="text-blue-200 mt-2">
+Pengujian selesai
+</p>
 
-                            <td class="border p-3 text-center">
 
+</div>
 
-                                @if($session->status == 'draft')
 
 
-                                    <span class="bg-yellow-200 text-yellow-800 
-                                    px-3 py-1 rounded-full text-sm">
+</div>
 
-                                        Draft
 
-                                    </span>
 
 
 
-                                @elseif($session->status == 'dibuka')
 
 
-                                    <span class="bg-green-200 text-green-800 
-                                    px-3 py-1 rounded-full text-sm">
 
-                                        Dibuka
 
-                                    </span>
+{{-- CURRENT ACTIVE TEST --}}
 
 
+@php
 
-                                @else
+$active =
+$sessions->where('status','dibuka')->first();
 
+@endphp
 
-                                    <span class="bg-gray-200 text-gray-800 
-                                    px-3 py-1 rounded-full text-sm">
 
-                                        Selesai
 
-                                    </span>
 
 
-                                @endif
 
+<div class="
+bg-gradient-to-r
+from-[#002B45]
+to-[#0077B6]
+rounded-3xl
+p-8
+text-white
+mb-10
+shadow-lg
+">
 
-                            </td>
 
+<h2 class="
+text-xl
+font-bold
+mb-6
+">
 
+Current Active Testing
 
+</h2>
 
 
 
 
-                            <td class="border p-3 text-center">
+@if($active)
 
 
-                                <div class="flex justify-center gap-2">
 
+<div class="
+grid
+grid-cols-1
+md:grid-cols-3
+gap-6
+">
 
 
-                                    {{-- Detail --}}
 
-                                    <a href="{{ route('admin.test_sessions.show',$session->id) }}"
+<div>
 
-                                       class="bg-blue-600 hover:bg-blue-700 
-                                       text-white px-3 py-1 rounded">
+<p class="text-blue-200 text-sm">
+Produk
+</p>
 
-                                        Detail
 
-                                    </a>
+<h3 class="
+text-2xl
+font-bold
+mt-2
+">
 
+{{$active->sample->product->nama_produk ?? '-'}}
 
-                                    {{-- Kontrol Status --}}
+</h3>
 
-@if($session->status == 'draft')
 
+</div>
 
-<form action="{{ route('admin.test_sessions.open',$session->id) }}"
-      method="POST"
-      class="inline">
 
-    @csrf
 
-    <button
-    class="bg-green-600 text-white px-3 py-1 rounded">
 
-        Buka
 
-    </button>
+<div>
 
+<p class="text-blue-200 text-sm">
+Kode Sample
+</p>
 
-</form>
 
+<h3 class="
+text-2xl
+font-bold
+mt-2
+">
 
+{{$active->sample->kode_sample ?? '-'}}
 
-@elseif($session->status == 'dibuka')
+</h3>
 
 
-<form action="{{ route('admin.test_sessions.finish',$session->id) }}"
-      method="POST"
-      class="inline">
+</div>
 
-    @csrf
 
-    <button
-    class="bg-gray-700 text-white px-3 py-1 rounded">
 
-        Selesai
 
-    </button>
 
+<div>
 
-</form>
+<p class="text-blue-200 text-sm">
+Tanggal
+</p>
+
+
+<h3 class="
+text-xl
+font-bold
+mt-2
+">
+
+{{date('d M Y',strtotime($active->tanggal_pengujian))}}
+
+</h3>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+<div class="
+mt-8
+bg-white/10
+rounded-2xl
+p-5
+">
+
+
+<p class="text-blue-100 text-sm">
+Panelis Terlibat
+</p>
+
+
+<div class="
+flex
+flex-wrap
+gap-3
+mt-4
+">
+
+
+@foreach($active->sessionUsers as $user)
+
+
+<span class="
+bg-white/20
+px-4
+py-2
+rounded-full
+text-sm
+">
+
+{{$user->nama}}
+
+</span>
+
+
+@endforeach
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+@else
+
+
+<div class="text-blue-100">
+
+Tidak ada pengujian aktif saat ini.
+
+</div>
 
 
 @endif
 
 
-                                    {{-- Edit --}}
 
-                                    <a href="{{ route('admin.test_sessions.edit',$session->id) }}"
+</div>
 
-                                       class="bg-yellow-500 hover:bg-yellow-600
-                                       text-white px-3 py-1 rounded">
 
-                                        Edit
 
-                                    </a>
 
 
 
 
 
-                                    {{-- Hapus --}}
 
-                                    <form action="{{ route('admin.test_sessions.destroy',$session->id) }}"
+{{-- TIMELINE --}}
 
-                                          method="POST">
 
 
-                                        @csrf
+<div class="
+bg-white
+rounded-3xl
+p-8
+shadow-sm
+">
 
-                                        @method('DELETE')
 
+<h2 class="
+text-xl
+font-bold
+text-[#003B5C]
+mb-8
+">
 
+Testing Timeline
 
-                                        <button
+</h2>
 
-                                        onclick="return confirm('Hapus sesi ini?')"
 
-                                        class="bg-red-600 hover:bg-red-700
-                                        text-white px-3 py-1 rounded">
 
 
-                                            Hapus
 
 
-                                        </button>
+<div class="space-y-6">
 
 
-                                    </form>
 
 
 
-                                </div>
+@forelse($sessions as $session)
 
 
-                            </td>
 
+<div class="
+flex
+gap-6
+items-start
+">
 
 
-                        </tr>
 
 
 
-                    @empty
+<div class="
+w-16
+h-16
+rounded-2xl
+bg-[#E7F7FA]
+flex
+items-center
+justify-center
+font-bold
+text-[#0077B6]
+">
 
 
+{{date('d',strtotime($session->tanggal_pengujian))}}
 
-                        <tr>
 
+</div>
 
-                            <td colspan="6"
 
-                                class="border p-5 text-center text-gray-500">
 
 
-                                Belum ada sesi pengujian
 
 
-                            </td>
 
 
-                        </tr>
+<div class="
+flex-1
+border-b
+pb-6
+">
 
 
 
-                    @endforelse
+<div class="
+flex
+justify-between
+items-start
+">
 
 
+<div>
 
-                    </tbody>
 
+<h3 class="
+text-lg
+font-bold
+text-[#003B5C]
+">
 
+{{$session->sample->product->nama_produk ?? '-'}}
 
-                </table>
+</h3>
 
 
+<p class="text-gray-500">
 
-            </div>
+Sample:
+{{$session->sample->kode_sample ?? '-'}}
 
+</p>
 
-        </div>
 
+</div>
 
-    </div>
 
 
 
-</x-app-layout> 
+
+
+
+@if($session->status=='dibuka')
+
+<span class="
+bg-green-100
+text-green-700
+px-4
+py-2
+rounded-full
+text-sm
+">
+
+ACTIVE
+
+</span>
+
+
+@elseif($session->status=='selesai')
+
+
+<span class="
+bg-gray-200
+text-gray-700
+px-4
+py-2
+rounded-full
+text-sm
+">
+
+SELESAI
+
+</span>
+
+
+@else
+
+
+<span class="
+bg-blue-100
+text-blue-700
+px-4
+py-2
+rounded-full
+text-sm
+">
+
+DRAFT
+
+</span>
+
+
+@endif
+
+
+
+</div>
+
+
+
+
+
+
+
+<div class="mt-4 flex gap-3">
+
+
+
+<a href="{{route('admin.test_sessions.show',$session)}}"
+
+class="
+bg-[#0077B6]
+text-white
+px-4
+py-2
+rounded-lg
+text-sm
+">
+
+Detail
+
+</a>
+
+
+
+
+<a href="{{route('admin.test_sessions.edit',$session)}}"
+
+class="
+bg-[#003B5C]
+text-white
+px-4
+py-2
+rounded-lg
+text-sm
+">
+
+Edit
+
+</a>
+
+
+
+
+</div>
+
+
+
+
+</div>
+
+
+
+
+</div>
+
+
+
+
+@empty
+
+
+<div class="
+text-center
+py-10
+text-gray-400
+">
+
+Belum ada sesi pengujian
+
+</div>
+
+
+
+@endforelse
+
+
+
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+</div>
+
+
+</div>
+
+
+</x-app-layout>

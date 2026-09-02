@@ -70,6 +70,8 @@ Nomor Sample
 
 
 
+
+
 <tr>
 
 <td class="border p-3 font-bold">
@@ -94,6 +96,7 @@ Tanggal Pengujian
 
 
 
+
 <tr>
 
 <td class="border p-3 font-bold">
@@ -104,6 +107,7 @@ Status
 
 
 <td class="border p-3">
+
 
 
 @if($testSession->status == 'draft')
@@ -147,6 +151,7 @@ Selesai
 
 
 </tr>
+
 
 
 
@@ -206,6 +211,8 @@ Tim Pengujian
 
 
 
+
+
 <table class="w-full border-collapse border">
 
 
@@ -238,11 +245,13 @@ Peran
 
 
 
+
+
 <tbody>
 
 
 
-@foreach($testSession->sessionUsers as $user)
+@forelse($testSession->sessionUsers as $user)
 
 
 
@@ -251,14 +260,38 @@ Peran
 
 <td class="border p-3">
 
-{{ $user->user->name }}
+
+@if($user->nama)
+
+
+    {{ $user->nama }}
+
+
+@elseif($user->user)
+
+
+    {{ $user->user->name }}
+
+
+@else
+
+
+    -
+
+
+@endif
+
+
 
 </td>
 
 
+
 <td class="border p-3">
 
+
 {{ ucfirst($user->role) }}
+
 
 </td>
 
@@ -268,7 +301,28 @@ Peran
 
 
 
-@endforeach
+@empty
+
+
+<tr>
+
+
+<td colspan="2" class="border p-3 text-center text-gray-500">
+
+
+Belum ada anggota tim pengujian
+
+
+</td>
+
+
+</tr>
+
+
+
+@endforelse
+
+
 
 
 
@@ -276,6 +330,10 @@ Peran
 
 
 </table>
+
+
+
+
 
 
 
@@ -288,6 +346,7 @@ Kembali
 
 
 </a>
+
 
 
 

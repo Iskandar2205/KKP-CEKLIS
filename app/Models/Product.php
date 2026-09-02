@@ -39,5 +39,18 @@ class Product extends Model
 
     }
 
+    public function criterias()
+    {
+         return $this->hasMany(Criteria::class);
+    }
 
+    public function templates()
+    {
+         return $this->hasMany(AssessmentTemplate::class);
+    }
+
+    public function assessmentTemplates()
+    {
+         return $this->hasMany(AssessmentTemplate::class);
+    }
 }

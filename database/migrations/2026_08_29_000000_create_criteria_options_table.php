@@ -4,11 +4,13 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+
 return new class extends Migration
 {
 
     public function up(): void
     {
+
 
         Schema::create('criteria_options', function (Blueprint $table) {
 
@@ -16,10 +18,16 @@ return new class extends Migration
             $table->id();
 
 
+            $table->foreignId('criteria_id')
+                ->constrained('criteria')
+                ->cascadeOnDelete();
+
+
+
             $table->integer('nilai');
 
 
-            $table->string('deskripsi');
+            $table->text('deskripsi');
 
 
             $table->timestamps();
@@ -27,13 +35,17 @@ return new class extends Migration
 
         });
 
+
     }
+
 
 
     public function down(): void
     {
 
+
         Schema::dropIfExists('criteria_options');
+
 
     }
 

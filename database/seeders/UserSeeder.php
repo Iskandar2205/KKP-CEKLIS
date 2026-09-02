@@ -30,9 +30,7 @@ class UserSeeder extends Seeder
         User::updateOrCreate(
 
             [
-
-                'email'=>'admin@gmail.com'
-
+                'username'=>'admin'
             ],
 
             [
@@ -40,6 +38,8 @@ class UserSeeder extends Seeder
                 'name'=>'Admin BPPMHKP',
 
                 'username'=>'admin',
+
+                'email'=>'admin@gmail.com',
 
                 'password'=>Hash::make('password'),
 
@@ -56,93 +56,118 @@ class UserSeeder extends Seeder
 
 
 
-/*
-|--------------------------------------------------------------------------
-| Panelis
-|--------------------------------------------------------------------------
-*/
 
 
-$panelis = [
+        /*
+        |--------------------------------------------------------------------------
+        | Panelis
+        |--------------------------------------------------------------------------
+        */
 
 
-    [
-        'name'=>'Panelis 01',
-        'username'=>'P001',
-        'email'=>'panelis1@gmail.com',
-    ],
+        $panelis = [
 
 
-    [
-        'name'=>'Panelis 02',
-        'username'=>'P002',
-        'email'=>'panelis2@gmail.com',
-    ],
+            [
 
+                'name'=>'Budi Santoso',
 
-    [
-        'name'=>'Panelis 03',
-        'username'=>'P003',
-        'email'=>'panelis3@gmail.com',
-    ],
+                'username'=>'P001',
 
+                'email'=>'budi@gmail.com',
 
-    [
-        'name'=>'Panelis 04',
-        'username'=>'P004',
-        'email'=>'panelis4@gmail.com',
-    ],
-
-
-    [
-        'name'=>'Panelis 05',
-        'username'=>'P005',
-        'email'=>'panelis5@gmail.com',
-    ],
-
-
-];
+            ],
 
 
 
+            [
 
-foreach($panelis as $data)
+                'name'=>'Ridwan Saputra',
 
-{
+                'username'=>'P002',
 
+                'email'=>'ridwan@gmail.com',
 
-    User::updateOrCreate(
-
-        [
-
-            'email'=>$data['email']
-
-        ],
+            ],
 
 
-        [
 
-            'name'=>$data['name'],
+            [
 
+                'name'=>'Ahmad Fauzi',
 
-            'username'=>$data['username'],
+                'username'=>'P003',
 
+                'email'=>'ahmad@gmail.com',
 
-            'password'=>Hash::make('password'),
-
-
-            'role'=>'panelis',
+            ],
 
 
-            'status'=>'aktif',
+
+            [
+
+                'name'=>'Siti Rahma',
+
+                'username'=>'P004',
+
+                'email'=>'siti@gmail.com',
+
+            ],
 
 
-        ]
 
-    );
+            [
+
+                'name'=>'Dewi Lestari',
+
+                'username'=>'P005',
+
+                'email'=>'dewi@gmail.com',
+
+            ],
 
 
-}
+        ];
+
+
+
+
+
+        foreach($panelis as $data)
+
+        {
+
+
+            User::updateOrCreate(
+
+                [
+
+                    // cari user lama berdasarkan username
+                    'username'=>$data['username']
+
+                ],
+
+
+                [
+
+                    'name'=>$data['name'],
+
+                    'email'=>$data['email'],
+
+                    'password'=>Hash::make('password'),
+
+                    'role'=>'panelis',
+
+                    'status'=>'aktif',
+
+                ]
+
+            );
+
+
+        }
+
+
 
 
 
@@ -161,7 +186,7 @@ foreach($panelis as $data)
 
             [
 
-                'email'=>'penyelia@gmail.com'
+                'username'=>'penyelia'
 
             ],
 
@@ -170,6 +195,8 @@ foreach($panelis as $data)
                 'name'=>'Penyelia 01 - Pak Wirsan',
 
                 'username'=>'penyelia',
+
+                'email'=>'penyelia@gmail.com',
 
                 'password'=>Hash::make('password'),
 
@@ -180,6 +207,7 @@ foreach($panelis as $data)
             ]
 
         );
+
 
 
 
@@ -199,7 +227,7 @@ foreach($panelis as $data)
 
             [
 
-                'email'=>'analis@gmail.com'
+                'username'=>'analis'
 
             ],
 
@@ -208,6 +236,8 @@ foreach($panelis as $data)
                 'name'=>'Analis 01',
 
                 'username'=>'analis',
+
+                'email'=>'analis@gmail.com',
 
                 'password'=>Hash::make('password'),
 
@@ -218,6 +248,8 @@ foreach($panelis as $data)
             ]
 
         );
+
+
 
 
 
@@ -236,7 +268,7 @@ foreach($panelis as $data)
 
             [
 
-                'email'=>'pimpinan@gmail.com'
+                'username'=>'pimpinan'
 
             ],
 
@@ -245,6 +277,8 @@ foreach($panelis as $data)
                 'name'=>'Pimpinan',
 
                 'username'=>'pimpinan',
+
+                'email'=>'pimpinan@gmail.com',
 
                 'password'=>Hash::make('password'),
 
