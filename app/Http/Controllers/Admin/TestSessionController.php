@@ -491,7 +491,38 @@ class TestSessionController extends Controller
 
     }
 
+/**
+ * Menampilkan hasil penilaian organoleptik
+ */
+    public function results(TestSession $testSession)
+    {
 
+
+        $testSession->load([
+
+
+            'sample.product',
+
+
+            'assessments.user',
+
+
+            'assessments.details.criteria'
+
+
+        ]);
+
+
+        return view(
+
+            'admin.test_sessions.results',
+
+            compact('testSession')
+
+        );
+
+
+    }
 
 
 

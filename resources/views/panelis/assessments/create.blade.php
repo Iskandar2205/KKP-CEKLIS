@@ -1,214 +1,225 @@
-<x-app-layout>
+@foreach($template->sections as $section)
 
+<div class="bg-white rounded-3xl shadow p-8 mb-8">
 
-<x-slot name="header">
 
-<h2 class="font-semibold text-xl text-gray-800">
+    <h2 class="text-xl font-bold text-[#003B5C] mb-6">
+        {{ $section->nama_section }}
+    </h2>
 
-Penilaian Organoleptik
 
-</h2>
 
-</x-slot>
+    @foreach($section->criterias as $criteria)
 
 
+    <div class="mb-10">
 
 
+        <div class="flex items-center justify-between mb-5">
 
-<div class="py-12">
 
+            <h3 class="font-bold text-lg text-gray-800">
+                {{ $criteria->nama_kriteria }}
+            </h3>
 
-<div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
+            <span class="text-sm text-gray-400">
+                Pilih satu nilai
+            </span>
 
-<div class="bg-white shadow rounded-lg p-6">
 
+        </div>
 
 
 
 
-<h3 class="text-lg font-bold mb-5">
+        <div class="space-y-4">
 
-{{ $testSession->sample->product->nama_produk }}
 
-</h3>
+            @foreach($criteria->options as $option)
 
 
+            <label class="block cursor-pointer">
 
 
+                <input
+                    type="radio"
+                    name="criteria[{{ $criteria->id }}]"
+                    value="{{ $option->nilai }}"
+                    class="peer hidden"
+                    required
+                >
 
-<table class="mb-6">
 
 
-<tr>
 
-<td class="font-bold pr-5">
+                <div class="
+                    flex
+                    items-center
+                    gap-5
 
-Sample
+                    w-full
 
-</td>
+                    border
+                    border-gray-200
 
+                    rounded-xl
 
-<td>
+                    px-5
+                    py-4
 
-{{ $testSession->sample->nomor_sample }}
+                    bg-white
 
-</td>
+                    shadow-sm
 
+                    transition-all
+                    duration-200
 
-</tr>
+                    hover:border-[#0077B6]
+                    hover:shadow-md
 
+                    peer-checked:border-[#0077B6]
+                    peer-checked:bg-blue-50
+                ">
 
 
 
-<tr>
+                    {{-- RADIO BUTTON --}}
 
-<td class="font-bold pr-5">
+                    <div class="
+                        w-6
+                        h-6
 
-Tanggal Pengujian
+                        rounded-full
 
-</td>
+                        border-2
+                        border-gray-300
 
+                        flex
+                        items-center
+                        justify-center
 
-<td>
+                        shrink-0
+                    ">
 
-{{ $testSession->tanggal_pengujian }}
+                        <div class="
+                            w-3
+                            h-3
 
-</td>
+                            rounded-full
 
+                            bg-[#0077B6]
 
-</tr>
+                            hidden
+                        ">
+                        </div>
 
+                    </div>
 
 
-</table>
 
 
 
+                    {{-- NILAI --}}
 
+                    <div class="
+                        w-12
+                        text-center
+                        shrink-0
+                    ">
 
+                        <span class="
+                            text-3xl
+                            font-bold
+                            text-[#0077B6]
+                        ">
 
+                            {{ $option->nilai }}
 
-<form action="{{ route('panelis.assessment.store',$testSession->id) }}"
+                        </span>
 
-method="POST">
 
+                    </div>
 
-@csrf
 
 
 
 
 
-<h3 class="font-bold mb-4">
+                    {{-- DESKRIPSI --}}
 
-Form Penilaian
+                    <div class="flex-1">
 
-</h3>
 
+                        <p class="
+                            text-base
+                            font-medium
+                            text-gray-700
+                            leading-relaxed
+                        ">
 
+                            {{ $option->deskripsi }}
 
+                        </p>
 
 
+                    </div>
 
-@foreach($criteria as $item)
 
 
-<div class="mb-6 border rounded p-4">
+                </div>
 
 
-<label class="block font-semibold mb-3">
+            </label>
 
-{{ $item->nama_kriteria }}
 
-</label>
+            @endforeach
 
 
+        </div>
 
 
+    </div>
 
-<div class="flex gap-4">
 
+    @endforeach
 
-@foreach([1,3,5,6,7,8,9] as $nilai)
 
-
-<label>
-
-
-<input type="radio"
-
-name="nilai[{{ $item->id }}]"
-
-value="{{ $nilai }}"
-
-required>
-
-
-{{ $nilai }}
-
-
-</label>
-
+</div>
 
 
 @endforeach
 
 
 
-</div>
-
-
-
-</div>
-
-
-
-@endforeach
-
-
-
-
-
+<div class="flex justify-end mt-8">
 
 
 <button
+    type="submit"
 
-class="bg-green-600 text-white px-5 py-2 rounded">
+    class="
+        bg-[#0077B6]
+        hover:bg-[#005B8A]
 
+        text-white
 
-Simpan Penilaian
+        font-bold
 
+        px-10
+        py-3
+
+        rounded-xl
+
+        shadow-lg
+
+        transition
+    "
+>
+
+    Simpan Penilaian
 
 </button>
 
 
-
-
-<a href="{{ route('panelis.dashboard') }}"
-
-class="ml-2 bg-gray-500 text-white px-5 py-2 rounded">
-
-Kembali
-
-</a>
-
-
-
-
-
-</form>
-
-
-
 </div>
-
-
-</div>
-
-
-</div>
-
-
-
-</x-app-layout>

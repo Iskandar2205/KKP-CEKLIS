@@ -15,51 +15,29 @@ class DashboardController extends Controller
 {
 
 
-    public function index()
-    {
+public function index()
+{
+
+    $user = auth()->user();
 
 
-        $user = Auth::user();
-
-
-
-
-
-        $sessions = SessionUser::with([
-
-                'testSession.sample.product'
-
-            ])
-
-            ->where('user_id',$user->id)
-
-            ->where('role','panelis')
-
-            ->whereHas('testSession', function($query){
-
-
-                $query->where('status','dibuka');
-
-
-            })
-
-            ->get();
+    $sessions = \App\Models\SessionUser::where(
+        'user_id',
+        $user->id
+    )
+    ->with([
+        'testSession.sample.product'
+    ])
+    ->get();
 
 
 
+    return view(
+        'panelis.dashboard',
+        compact('sessions')
+    );
 
-
-
-        return view(
-
-            'panelis.dashboard',
-
-            compact('sessions')
-
-        );
-
-
-    }
+}
 
 
 }

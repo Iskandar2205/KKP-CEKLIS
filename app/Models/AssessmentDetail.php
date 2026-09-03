@@ -2,45 +2,39 @@
 
 namespace App\Models;
 
-
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-
 
 class AssessmentDetail extends Model
 {
-
-    use HasFactory;
-
-
 
     protected $fillable = [
 
         'assessment_id',
         'criteria_id',
-        'nilai',
+        'nilai'
 
     ];
-
 
 
 
     public function assessment()
     {
 
-        return $this->belongsTo(Assessment::class);
+        return $this->belongsTo(
+            Assessment::class
+        );
 
     }
-
 
 
 
     public function criteria()
     {
 
-        return $this->belongsTo(Criteria::class);
+        return $this->belongsTo(
+            Criteria::class
+        );
 
     }
-
 
 }

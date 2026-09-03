@@ -32,11 +32,18 @@ class TestSession extends Model
 
     public function sample()
     {
-
-        return $this->belongsTo(Sample::class);
-
+        return $this->belongsTo(
+            Sample::class
+        );
     }
 
+
+    public function assessments()
+    {
+        return $this->hasMany(
+            Assessment::class
+        );
+    }
 
 
 

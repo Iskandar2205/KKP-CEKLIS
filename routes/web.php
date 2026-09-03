@@ -151,6 +151,12 @@ Route::post(
 )
 ->name('test_sessions.finish');
 
+Route::get(
+    'test_sessions/{testSession}/results',
+    [TestSessionController::class,'results']
+)
+->name('test_sessions.results');
+
 
 
 

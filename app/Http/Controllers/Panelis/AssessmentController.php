@@ -2,46 +2,52 @@
 
 namespace App\Http\Controllers\Panelis;
 
-
 use App\Http\Controllers\Controller;
-
 use App\Models\TestSession;
-use App\Models\Criteria;
 use App\Models\Assessment;
-
+use App\Models\AssessmentDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
 
 
 class AssessmentController extends Controller
 {
 
 
-    /**
-     * Form penilaian panelis
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | Form Penilaian Panelis
+    |--------------------------------------------------------------------------
+    */
+
     public function create(TestSession $testSession)
     {
 
 
-        // Ambil semua kriteria penilaian
+        $testSession->load([
 
-        $criteria = Criteria::all();
+            'sample.product.assessmentTemplates.sections.criterias.options'
+
+        ]);
+
+
+
+        $template = 
+            $testSession
+            ->sample
+            ->product
+            ->assessmentTemplates
+            ->first();
 
 
 
         return view(
-
-            'panelis.assessments.create',
-
-            compact(
-                'testSession',
-                'criteria'
-            )
-
-        );
-
+                'panelis.assessments.create',
+                compact(
+                    'testSession',
+                    'template'
+                )
+            );
 
     }
 
@@ -50,50 +56,39 @@ class AssessmentController extends Controller
 
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | Simpan Penilaian
+    |--------------------------------------------------------------------------
+    */
 
-    /**
-     * Simpan hasil penilaian
-     */
-    public function store(Request $request, TestSession $testSession)
+
+    public function store(
+        Request $request,
+        TestSession $testSession
+    )
     {
 
 
         $request->validate([
 
-
             'nilai'=>[
-
                 'required',
-
                 'array'
-
-            ],
-
+            ]
 
         ]);
 
 
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Membuat Assessment
-        |--------------------------------------------------------------------------
-        */
 
 
         $assessment = Assessment::create([
 
-
             'test_session_id'=>$testSession->id,
-
 
             'user_id'=>Auth::id(),
 
-
-            'status'=>'selesai',
-
+            'status'=>'selesai'
 
         ]);
 
@@ -101,29 +96,26 @@ class AssessmentController extends Controller
 
 
 
+        $total = 0;
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | Simpan Detail Nilai
-        |--------------------------------------------------------------------------
-        */
 
-
-        foreach($request->nilai as $criteria_id=>$nilai)
+        foreach($request->nilai as $criteriaId=>$nilai)
         {
 
 
-            $assessment->details()->create([
+            AssessmentDetail::create([
 
+                'assessment_id'=>$assessment->id,
 
-                'criteria_id'=>$criteria_id,
+                'criteria_id'=>$criteriaId,
 
-
-                'nilai'=>$nilai,
-
+                'nilai'=>$nilai
 
             ]);
+
+
+            $total += $nilai;
 
 
         }
@@ -131,18 +123,33 @@ class AssessmentController extends Controller
 
 
 
+        $jumlah = count($request->nilai);
+
+
+
+        $assessment->update([
+
+            'total_nilai'=>$total,
+
+            'nilai_akhir'=>round(
+                $total/$jumlah,
+                2
+            )
+
+        ]);
+
+
 
 
         return redirect()
 
-            ->route('panelis.dashboard')
+            ->route(
+                'panelis.dashboard'
+            )
 
             ->with(
-
                 'success',
-
                 'Penilaian berhasil disimpan'
-
             );
 
 

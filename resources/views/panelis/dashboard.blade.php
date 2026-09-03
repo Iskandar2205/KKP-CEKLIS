@@ -88,131 +88,76 @@ Aksi
 
 <tbody>
 
+@if($sessions->count() > 0)
 
-
-@forelse($sessions as $session)
-
-
+@foreach($sessions as $index=>$session)
 
 <tr>
 
-
-<td class="border p-3 text-center">
-
-{{ $loop->iteration }}
-
+<td>
+{{ $index+1 }}
 </td>
 
 
-
-
-
-
-<td class="border p-3">
-
+<td>
 {{ $session->testSession->sample->product->nama_produk }}
-
 </td>
 
 
-
-
-
-
-<td class="border p-3">
-
+<td>
 {{ $session->testSession->sample->nomor_sample }}
-
 </td>
 
 
-
-
-
-
-<td class="border p-3">
-
-{{ \Carbon\Carbon::parse(
-$session->testSession->tanggal_pengujian
-)->format('d-m-Y') }}
-
+<td>
+{{ $session->testSession->tanggal_pengujian }}
 </td>
 
 
-
-
-
-
-
-<td class="border p-3 text-center">
-
-
-<span class="bg-green-200 text-green-800 px-3 py-1 rounded-full text-sm">
-
-Dibuka
-
-</span>
-
-
+<td>
+{{ $session->testSession->status }}
 </td>
 
 
+<td>
 
+<a 
+href="{{ route(
+    'panelis.assessment.create',
+    $session->testSession->id
+) }}"
 
-
-
-
-
-<td class="border p-3 text-center">
-
-
-<a href="{{ route('panelis.assessment.create',$session->testSession->id) }}"
-
-class="bg-blue-600 text-white px-3 py-1 rounded">
+class="bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700">
 
 Nilai
 
 </a>
 
-
 </td>
 
-
-
+</td>
 
 
 </tr>
 
 
+@endforeach
 
 
-
-@empty
-
-
+@else
 
 <tr>
 
-
 <td colspan="6"
-
-class="border p-5 text-center text-gray-500">
-
+class="text-center">
 
 Belum ada pengujian aktif
 
-
 </td>
-
 
 </tr>
 
-
-
-@endforelse
-
-
-
+@endif
 
 
 </tbody>

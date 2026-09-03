@@ -29,13 +29,13 @@ class DatasetImport implements ToCollection
 
 
 
-
     public function collection(Collection $rows): void
     {
 
 
+
         /*
-        Buat Template
+        Template
         */
 
         $template = AssessmentTemplate::firstOrCreate(
@@ -53,19 +53,25 @@ class DatasetImport implements ToCollection
 
 
 
+
         /*
-        Buat Section
+        Section
         */
 
         $section = AssessmentSection::firstOrCreate(
 
             [
+
                 'assessment_template_id'=>$template->id,
+
                 'nama_section'=>'Penilaian Sensori'
+
             ],
 
             [
+
                 'urutan'=>1
+
             ]
 
         );
@@ -74,69 +80,102 @@ class DatasetImport implements ToCollection
 
 
 
-        foreach ($rows->skip(2) as $row)
+        /*
+        Variabel kriteria aktif
+        */
+
+        $criteria = null;
+
+
+
+        foreach($rows->skip(2) as $row)
         {
 
 
 
-            // format:
-             // kolom 0 = nama kriteria
-            // kolom 1 = nilai angka
-            // kolom 2 = deskripsi/keterangan
+            $kolomA = trim($row[0] ?? '');
 
+            $kolomB = trim($row[1] ?? '');
+
+
+
+
+            if(empty($kolomA))
+            {
+                continue;
+            }
+
+
+
+
+            /*
+            Jika kolom A adalah judul kriteria
+            contoh:
+            1 Kenampakan
+            2 Bau
+            */
 
             if(
-    empty($row[0]) ||
-    !is_numeric($row[1])
-)
-{
-    continue;
-}
+                preg_match('/^[0-9]+\s+(.*)$/',$kolomA,$match)
+            )
+            {
+
+
+                $namaKriteria = trim($match[1]);
+
+
+
+                $criteria = Criteria::create([
+
+                    'assessment_section_id'=>$section->id,
+
+                    'nama_kriteria'=>$namaKriteria,
+
+                    'urutan'=>1
+
+                ]);
+
+
+
+                continue;
+
+            }
+
 
 
 
 
 
             /*
-            Buat Criteria
-            */$criteria = Criteria::firstOrCreate(
-
-    [
-
-        'assessment_section_id'=>$section->id,
-
-        'nama_kriteria'=>$row[0],
-
-    ],
-
-    [
-
-        'urutan'=>1
-
-    ]
-
-);
-
-            /*
-            Buat pilihan nilai
+            Jika kolom B adalah nilai angka
+            berarti ini option
             */
 
 
-CriteriaOption::firstOrCreate(
+            if(
+                is_numeric($kolomB)
+                &&
+                $criteria
+            )
+            {
 
-[
-    'criteria_id'=>$criteria->id,
 
-    'nilai'=>(int)trim($row[1])
+                CriteriaOption::create([
 
-],
 
-[
-    'deskripsi'=>trim($row[2] ?? '-')
+                    'criteria_id'=>$criteria->id,
 
-]
 
-);
+                    'nilai'=>(int)$kolomB,
+
+
+                    'deskripsi'=>$kolomA
+
+
+                ]);
+
+            }
+
 
 
 
