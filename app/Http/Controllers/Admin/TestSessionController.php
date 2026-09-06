@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
-
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\TestSession;
 use App\Models\Sample;
 use App\Models\User;
-
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 
 
@@ -34,8 +34,6 @@ class TestSessionController extends Controller
             'admin.test_sessions.index',
             compact('sessions')
         );
-
-
     }
 
 
@@ -56,14 +54,14 @@ class TestSessionController extends Controller
 
 
 
-        $panelis = User::where('role','panelis')
-            ->where('status','aktif')
+        $panelis = User::where('role', 'panelis')
+            ->where('status', 'aktif')
             ->get();
 
 
 
-        $penyelia = User::where('role','penyelia')
-            ->where('status','aktif')
+        $penyelia = User::where('role', 'penyelia')
+            ->where('status', 'aktif')
             ->get();
 
 
@@ -79,14 +77,7 @@ class TestSessionController extends Controller
             )
 
         );
-
-
     }
-
-
-
-
-
 
 
 
@@ -101,46 +92,46 @@ class TestSessionController extends Controller
         $validated = $request->validate([
 
 
-            'sample_id'=>[
+            'sample_id' => [
                 'required',
                 'exists:samples,id'
             ],
 
 
-            'tanggal_pengujian'=>[
+            'tanggal_pengujian' => [
                 'required',
                 'date'
             ],
 
 
-            'status'=>[
+            'status' => [
                 'required',
                 'in:draft,dibuka,selesai'
             ],
 
 
-            'catatan'=>[
+            'catatan' => [
                 'nullable',
                 'string'
             ],
 
 
 
-            'panelis'=>[
+            'panelis' => [
                 'required',
                 'array'
             ],
 
 
 
-            'panelis.*'=>[
+            'panelis.*' => [
                 'required',
                 'exists:users,id'
             ],
 
 
 
-            'penyelia'=>[
+            'penyelia' => [
                 'nullable',
                 'exists:users,id'
             ],
@@ -165,16 +156,16 @@ class TestSessionController extends Controller
         $session = TestSession::create([
 
 
-            'sample_id'=>$request->sample_id,
+            'sample_id' => $request->sample_id,
 
 
-            'tanggal_pengujian'=>$request->tanggal_pengujian,
+            'tanggal_pengujian' => $request->tanggal_pengujian,
 
 
-            'status'=>$request->status,
+            'status' => $request->status,
 
 
-            'catatan'=>$request->catatan,
+            'catatan' => $request->catatan,
 
 
         ]);
@@ -195,22 +186,19 @@ class TestSessionController extends Controller
         */
 
 
-        foreach($request->panelis as $panelisId)
-        {
+        foreach ($request->panelis as $panelisId) {
 
 
             $session->sessionUsers()->create([
 
 
-                'user_id'=>$panelisId,
+                'user_id' => $panelisId,
 
 
-                'role'=>'panelis'
+                'role' => 'panelis'
 
 
             ]);
-
-
         }
 
 
@@ -228,22 +216,19 @@ class TestSessionController extends Controller
         */
 
 
-        if($request->penyelia)
-        {
+        if ($request->penyelia) {
 
 
             $session->sessionUsers()->create([
 
 
-                'user_id'=>$request->penyelia,
+                'user_id' => $request->penyelia,
 
 
-                'role'=>'penyelia'
+                'role' => 'penyelia'
 
 
             ]);
-
-
         }
 
 
@@ -261,8 +246,6 @@ class TestSessionController extends Controller
                 'success',
                 'Sesi pengujian berhasil dibuat'
             );
-
-
     }
 
 
@@ -298,8 +281,6 @@ class TestSessionController extends Controller
             compact('testSession')
 
         );
-
-
     }
 
 
@@ -322,14 +303,14 @@ class TestSessionController extends Controller
 
 
 
-        $panelis = User::where('role','panelis')
-            ->where('status','aktif')
+        $panelis = User::where('role', 'panelis')
+            ->where('status', 'aktif')
             ->get();
 
 
 
-        $penyelia = User::where('role','penyelia')
-            ->where('status','aktif')
+        $penyelia = User::where('role', 'penyelia')
+            ->where('status', 'aktif')
             ->get();
 
 
@@ -351,8 +332,6 @@ class TestSessionController extends Controller
             )
 
         );
-
-
     }
 
 
@@ -373,25 +352,25 @@ class TestSessionController extends Controller
         $validated = $request->validate([
 
 
-            'sample_id'=>[
+            'sample_id' => [
                 'required',
                 'exists:samples,id'
             ],
 
 
-            'tanggal_pengujian'=>[
+            'tanggal_pengujian' => [
                 'required',
                 'date'
             ],
 
 
-            'status'=>[
+            'status' => [
                 'required',
                 'in:draft,dibuka,selesai'
             ],
 
 
-            'catatan'=>[
+            'catatan' => [
                 'nullable',
                 'string'
             ],
@@ -417,8 +396,6 @@ class TestSessionController extends Controller
                 'success',
                 'Sesi berhasil diperbarui'
             );
-
-
     }
 
 
@@ -438,7 +415,7 @@ class TestSessionController extends Controller
 
         $testSession->update([
 
-            'status'=>'dibuka'
+            'status' => 'dibuka'
 
         ]);
 
@@ -452,8 +429,6 @@ class TestSessionController extends Controller
                 'success',
                 'Sesi berhasil dibuka'
             );
-
-
     }
 
 
@@ -473,7 +448,7 @@ class TestSessionController extends Controller
 
         $testSession->update([
 
-            'status'=>'selesai'
+            'status' => 'selesai'
 
         ]);
 
@@ -487,45 +462,134 @@ class TestSessionController extends Controller
                 'success',
                 'Sesi berhasil diselesaikan'
             );
-
-
     }
 
-/**
- * Menampilkan hasil penilaian organoleptik
- */
+    /**
+     * Menampilkan hasil penilaian organoleptik
+     */
     public function results(TestSession $testSession)
     {
 
-
         $testSession->load([
-
 
             'sample.product',
 
-
             'assessments.user',
-
 
             'assessments.details.criteria'
 
-
         ]);
+
+
+
+        $assessments = $testSession->assessments;
+
+
+
+        $criteriaList = collect();
+
+
+
+        foreach ($assessments as $assessment) {
+
+            foreach ($assessment->details as $detail) {
+
+                $criteriaList->push(
+                    $detail->criteria
+                );
+            }
+        }
+
+
+
+        $criteriaList = $criteriaList
+            ->unique('id')
+            ->values();
+
+
+
+        $rekap = [];
+
+
+
+        foreach ($criteriaList as $criteria) {
+
+            $rekap[$criteria->nama_kriteria] =
+                $assessments->sum(function ($assessment) use ($criteria) {
+
+                    return $assessment
+                        ->details
+                        ->where(
+                            'criteria_id',
+                            $criteria->id
+                        )
+                        ->sum('nilai');
+                });
+        }
+
+
+
+
+        $jumlahPanelis = $assessments->count();
+
+
+
+        $totalSemua = $assessments->sum('total_nilai');
+
+
+
+        $rataRata = $jumlahPanelis > 0
+            ? round(
+                $totalSemua /
+                    ($jumlahPanelis * $criteriaList->count()),
+                2
+            )
+            : 0;
+
 
 
         return view(
 
             'admin.test_sessions.results',
 
-            compact('testSession')
+            compact(
+
+                'testSession',
+                'criteriaList',
+                'rekap',
+                'jumlahPanelis',
+                'totalSemua',
+                'rataRata'
+
+            )
 
         );
-
-
     }
 
+    public function exportExcel(TestSession $testSession)
+    {
 
 
+        $testSession->load([
+
+            'sample.product',
+
+            'assessments.user',
+
+            'assessments.details.criteria'
+
+        ]);
+
+
+
+        return Excel::download(
+
+            new \App\Exports\TestSessionResultExport($testSession),
+
+            'hasil_pengujian_' . $testSession->sample->nomor_sample . '.xlsx'
+
+        );
+    }
 
 
 
@@ -549,9 +613,82 @@ class TestSessionController extends Controller
                 'success',
                 'Sesi berhasil dihapus'
             );
-
-
     }
 
+   public function exportPdf(TestSession $testSession)
+{
 
+    $testSession->load([
+
+        'sample.product',
+
+        'assessments.user',
+
+        'assessments.details.criteria'
+
+    ]);
+
+
+    $pdf = Pdf::loadView(
+
+        'admin.test_sessions.pdf',
+
+        compact('testSession')
+
+    );
+
+
+    $pdf->setPaper(
+        'a4',
+        'landscape'
+    );
+
+
+    $filename = 
+        'Hasil_Uji_' .
+        $testSession->sample->nomor_sample .
+        '.pdf';
+
+
+
+    return response($pdf->output(), 200)
+
+        ->header(
+            'Content-Type',
+            'application/pdf'
+        )
+
+        ->header(
+            'Content-Disposition',
+            'attachment; filename="'.$filename.'"'
+        )
+
+        ->header(
+            'Cache-Control',
+            'no-cache, no-store, must-revalidate'
+        )
+
+        ->header(
+            'Pragma',
+            'no-cache'
+        )
+
+        ->header(
+            'Expires',
+            '0'
+        );
+
+}
+    public function downloadPdf(TestSession $testSession)
+    {
+        $pdf = Pdf::loadView(
+            'admin.test_sessions.pdf',
+            compact('testSession')
+        )
+            ->setPaper('a4', 'landscape');
+
+        return $pdf->download(
+            'hasil_pengujian_' . $testSession->sample->nomor_sample . '.pdf'
+        );
+    }
 }

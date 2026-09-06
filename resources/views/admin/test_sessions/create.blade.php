@@ -1,32 +1,32 @@
 <x-app-layout>
 
 
-<x-slot name="header">
+    <x-slot name="header">
 
-    <h2 class="font-semibold text-xl text-gray-800">
-        Buat Sesi Pengujian
-    </h2>
+        <h2 class="font-semibold text-xl text-gray-800">
+            Buat Sesi Pengujian
+        </h2>
 
-</x-slot>
+    </x-slot>
 
 
 
 
 
-<div class="py-12">
+    <div class="py-12">
 
 
-<div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
 
-<div class="bg-white shadow-sm rounded-lg p-6">
+            <div class="bg-white shadow-sm rounded-lg p-6">
 
 
 
-<form action="{{ route('admin.test_sessions.store') }}"
-      method="POST">
+                <form action="{{ route('admin.test_sessions.store') }}"
+                    method="POST">
 
-@csrf
+                    @csrf
 
 
 
@@ -34,40 +34,40 @@
 
 
 
-{{-- SAMPLE --}}
+                    {{-- SAMPLE --}}
 
-<div class="mb-4">
+                    <div class="mb-4">
 
-<label class="block font-medium mb-2">
-    Sample Pengujian
-</label>
+                        <label class="block font-medium mb-2">
+                            Sample Pengujian
+                        </label>
 
 
-<select name="sample_id"
-        class="w-full border rounded p-2">
+                        <select name="sample_id"
+                            class="w-full border rounded p-2">
 
 
-<option value="">
-    -- Pilih Sample --
-</option>
+                            <option value="">
+                                -- Pilih Sample --
+                            </option>
 
 
-@foreach($samples as $sample)
+                            @foreach($samples as $sample)
 
-<option value="{{ $sample->id }}">
+                            <option value="{{ $sample->id }}">
 
-{{ $sample->product->nama_produk }}
--
-{{ $sample->nomor_sample }}
+                                {{ $sample->product->nama_produk }}
+                                -
+                                {{ $sample->nomor_sample }}
 
-</option>
+                            </option>
 
-@endforeach
+                            @endforeach
 
 
-</select>
+                        </select>
 
-</div>
+                    </div>
 
 
 
@@ -76,20 +76,20 @@
 
 
 
-{{-- TANGGAL --}}
+                    {{-- TANGGAL --}}
 
-<div class="mb-4">
+                    <div class="mb-4">
 
-<label class="block font-medium mb-2">
-    Tanggal Pengujian
-</label>
+                        <label class="block font-medium mb-2">
+                            Tanggal Pengujian
+                        </label>
 
 
-<input type="date"
-       name="tanggal_pengujian"
-       class="w-full border rounded p-2">
+                        <input type="date"
+                            name="tanggal_pengujian"
+                            class="w-full border rounded p-2">
 
-</div>
+                    </div>
 
 
 
@@ -98,37 +98,37 @@
 
 
 
-{{-- STATUS --}}
+                    {{-- STATUS --}}
 
-<div class="mb-4">
+                    <div class="mb-4">
 
-<label class="block font-medium mb-2">
-    Status
-</label>
+                        <label class="block font-medium mb-2">
+                            Status
+                        </label>
 
 
-<select name="status"
-        class="w-full border rounded p-2">
+                        <select name="status"
+                            class="w-full border rounded p-2">
 
 
-<option value="draft">
-    Draft
-</option>
+                            <option value="draft">
+                                Draft
+                            </option>
 
 
-<option value="dibuka">
-    Dibuka
-</option>
+                            <option value="dibuka">
+                                Dibuka
+                            </option>
 
 
-<option value="selesai">
-    Selesai
-</option>
+                            <option value="selesai">
+                                Selesai
+                            </option>
 
 
-</select>
+                        </select>
 
-</div>
+                    </div>
 
 
 
@@ -137,21 +137,21 @@
 
 
 
-{{-- CATATAN --}}
+                    {{-- CATATAN --}}
 
-<div class="mb-4">
+                    <div class="mb-4">
 
-<label class="block font-medium mb-2">
-    Catatan
-</label>
+                        <label class="block font-medium mb-2">
+                            Catatan
+                        </label>
 
 
-<textarea name="catatan"
-          rows="4"
-          class="w-full border rounded p-2"
-          placeholder="Catatan pengujian..."></textarea>
+                        <textarea name="catatan"
+                            rows="4"
+                            class="w-full border rounded p-2"
+                            placeholder="Catatan pengujian..."></textarea>
 
-</div>
+                    </div>
 
 
 
@@ -161,66 +161,66 @@
 
 
 
-{{-- PANELIS --}}
+                    {{-- PANELIS --}}
 
-<div class="mb-6">
+                    <div class="mb-6">
 
 
-<label class="block font-medium mb-3">
-    Panelis
-</label>
+                        <label class="block font-medium mb-3">
+                            Panelis
+                        </label>
 
 
 
-<div id="panelis-wrapper" class="space-y-4">
+                        <div id="panelis-wrapper" class="space-y-4">
 
 
 
 
 
 
-{{-- PANELIS 1 --}}
+                            {{-- PANELIS 1 --}}
 
-<div class="panelis-row flex items-center gap-4">
+                            <div class="panelis-row flex items-center gap-4">
 
 
-<label class="w-32 font-medium">
-    Panelis 1
-</label>
+                                <label class="w-32 font-medium">
+                                    Panelis 1
+                                </label>
 
 
-<select name="panelis[]"
-        class="flex-1 border rounded p-2">
+                                <select name="panelis[]"
+                                    class="flex-1 border rounded p-2">
 
 
-<option value="">
-    -- Pilih Panelis --
-</option>
+                                    <option value="">
+                                        -- Pilih Panelis --
+                                    </option>
 
 
-@foreach($panelis as $user)
+                                    @foreach($panelis as $user)
 
-<option value="{{ $user->id }}">
-    {{ $user->name }}
-</option>
+                                    <option value="{{ $user->id }}">
+                                        {{ $user->name }}
+                                    </option>
 
-@endforeach
+                                    @endforeach
 
 
-</select>
+                                </select>
 
 
 
-<button type="button"
-        onclick="hapusPanelis(this)"
-        class="bg-red-600 text-white px-3 py-2 rounded">
+                                <button type="button"
+                                    onclick="hapusPanelis(this)"
+                                    class="bg-red-600 text-white px-3 py-2 rounded">
 
-Hapus
+                                    Hapus
 
-</button>
+                                </button>
 
 
-</div>
+                            </div>
 
 
 
@@ -229,48 +229,48 @@ Hapus
 
 
 
-{{-- PANELIS 2 --}}
+                            {{-- PANELIS 2 --}}
 
-<div class="panelis-row flex items-center gap-4">
+                            <div class="panelis-row flex items-center gap-4">
 
 
-<label class="w-32 font-medium">
-    Panelis 2
-</label>
+                                <label class="w-32 font-medium">
+                                    Panelis 2
+                                </label>
 
 
-<select name="panelis[]"
-        class="flex-1 border rounded p-2">
+                                <select name="panelis[]"
+                                    class="flex-1 border rounded p-2">
 
 
-<option value="">
-    -- Pilih Panelis --
-</option>
+                                    <option value="">
+                                        -- Pilih Panelis --
+                                    </option>
 
 
-@foreach($panelis as $user)
+                                    @foreach($panelis as $user)
 
-<option value="{{ $user->id }}">
-    {{ $user->name }}
-</option>
+                                    <option value="{{ $user->id }}">
+                                        {{ $user->name }}
+                                    </option>
 
-@endforeach
+                                    @endforeach
 
 
-</select>
+                                </select>
 
 
 
-<button type="button"
-        onclick="hapusPanelis(this)"
-        class="bg-red-600 text-white px-3 py-2 rounded">
+                                <button type="button"
+                                    onclick="hapusPanelis(this)"
+                                    class="bg-red-600 text-white px-3 py-2 rounded">
 
-Hapus
+                                    Hapus
 
-</button>
+                                </button>
 
 
-</div>
+                            </div>
 
 
 
@@ -279,52 +279,52 @@ Hapus
 
 
 
-{{-- PANELIS 3 --}}
+                            {{-- PANELIS 3 --}}
 
-<div class="panelis-row flex items-center gap-4">
+                            <div class="panelis-row flex items-center gap-4">
 
 
-<label class="w-32 font-medium">
-    Panelis 3
-</label>
+                                <label class="w-32 font-medium">
+                                    Panelis 3
+                                </label>
 
 
-<select name="panelis[]"
-        class="flex-1 border rounded p-2">
+                                <select name="panelis[]"
+                                    class="flex-1 border rounded p-2">
 
 
-<option value="">
-    -- Pilih Panelis --
-</option>
+                                    <option value="">
+                                        -- Pilih Panelis --
+                                    </option>
 
 
-@foreach($panelis as $user)
+                                    @foreach($panelis as $user)
 
-<option value="{{ $user->id }}">
-    {{ $user->name }}
-</option>
+                                    <option value="{{ $user->id }}">
+                                        {{ $user->name }}
+                                    </option>
 
-@endforeach
+                                    @endforeach
 
 
-</select>
+                                </select>
 
 
 
-<button type="button"
-        onclick="hapusPanelis(this)"
-        class="bg-red-600 text-white px-3 py-2 rounded">
+                                <button type="button"
+                                    onclick="hapusPanelis(this)"
+                                    class="bg-red-600 text-white px-3 py-2 rounded">
 
-Hapus
+                                    Hapus
 
-</button>
+                                </button>
 
 
-</div>
+                            </div>
 
 
 
-</div>
+                        </div>
 
 
 
@@ -332,17 +332,17 @@ Hapus
 
 
 
-<button type="button"
-        onclick="tambahPanelis()"
-        class="mt-4 bg-blue-600 text-white px-4 py-2 rounded">
+                        <button type="button"
+                            onclick="tambahPanelis()"
+                            class="mt-4 bg-blue-600 text-white px-4 py-2 rounded">
 
-+ Tambah Panelis
+                            + Tambah Panelis
 
-</button>
+                        </button>
 
 
 
-</div>
+                    </div>
 
 
 
@@ -352,34 +352,34 @@ Hapus
 
 
 
-{{-- PENYELIA --}}
+                    {{-- PENYELIA --}}
 
-<div class="mb-6">
+                    <div class="mb-6">
 
 
-<label class="block font-medium mb-2">
-    Penyelia
-</label>
+                        <label class="block font-medium mb-2">
+                            Penyelia
+                        </label>
 
 
 
-<select name="penyelia"
-        class="w-full border rounded p-2">
+                        <select name="penyelia"
+                            class="w-full border rounded p-2">
 
 
 
-<option value="5">
+                            <option value="5">
 
-Pak Wirsan
+                                Pak Wirsan
 
-</option>
+                            </option>
 
 
 
-</select>
+                        </select>
 
 
-</div>
+                    </div>
 
 
 
@@ -388,46 +388,46 @@ Pak Wirsan
 
 
 
-<button type="submit"
+                    <button type="submit"
 
-class="bg-green-600 text-white px-4 py-2 rounded">
+                        class="bg-green-600 text-white px-4 py-2 rounded">
 
 
-Simpan Sesi
+                        Simpan Sesi
 
 
-</button>
+                    </button>
 
 
 
 
 
 
-<a href="{{ route('admin.test_sessions.index') }}"
+                    <a href="{{ route('admin.test_sessions.index') }}"
 
-class="ml-2 bg-gray-500 text-white px-4 py-2 rounded">
+                        class="ml-2 bg-gray-500 text-white px-4 py-2 rounded">
 
 
-Kembali
+                        Kembali
 
 
-</a>
+                    </a>
 
 
 
 
 
-</form>
+                </form>
 
 
 
-</div>
+            </div>
 
 
-</div>
+        </div>
 
 
-</div>
+    </div>
 
 
 
@@ -436,33 +436,31 @@ Kembali
 
 
 
-<script>
+    <script>
+        let jumlahPanelis = 3;
 
 
-let jumlahPanelis = 3;
 
+        function tambahPanelis()
 
+        {
 
-function tambahPanelis()
 
-{
+            jumlahPanelis++;
 
 
-jumlahPanelis++;
+            let wrapper = document.getElementById('panelis-wrapper');
 
 
-let wrapper = document.getElementById('panelis-wrapper');
+            let div = document.createElement('div');
 
 
-let div = document.createElement('div');
+            div.className =
+                "panelis-row flex items-center gap-4";
 
 
-div.className =
-"panelis-row flex items-center gap-4";
 
-
-
-div.innerHTML = `
+            div.innerHTML = `
 
 
 <label class="w-32 font-medium">
@@ -517,33 +515,30 @@ Hapus
 
 
 
-wrapper.appendChild(div);
+            wrapper.appendChild(div);
 
 
-}
-
-
-
+        }
 
 
 
 
-function hapusPanelis(button)
-
-{
-
-
-let row = button.closest('.panelis-row');
-
-
-row.remove();
-
-
-}
 
 
 
-</script>
+        function hapusPanelis(button)
+
+        {
+
+
+            let row = button.closest('.panelis-row');
+
+
+            row.remove();
+
+
+        }
+    </script>
 
 
 

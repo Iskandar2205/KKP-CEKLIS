@@ -1,30 +1,16 @@
 <x-app-layout>
 
 
-<x-slot name="header">
-
-<div>
-
-<h2 class="text-2xl font-bold text-[#003B5C]">
-BPPMHKP Quality Control Center
-</h2>
-
-<p class="text-sm text-gray-500">
-Ocean Laboratory Monitoring System
-</p>
-
-</div>
-
-</x-slot>
+    
 
 
 
 
 
-<div class="min-h-screen bg-[#F2FAFC] py-10">
+    <div class="min-h-screen bg-[#F2FAFC] py-10">
 
 
-<div class="max-w-7xl mx-auto px-6">
+        <div class="max-w-7xl mx-auto px-6">
 
 
 
@@ -32,10 +18,10 @@ Ocean Laboratory Monitoring System
 
 
 
-{{-- HEADER SYSTEM --}}
+            {{-- HEADER SYSTEM --}}
 
 
-<div class="
+            <div class="
 relative
 overflow-hidden
 rounded-[30px]
@@ -50,59 +36,59 @@ mb-10
 ">
 
 
-<div class="relative z-10">
+                <div class="relative z-10">
 
 
-<div class="flex justify-between items-center">
+                    <div class="flex justify-between items-center">
 
 
-<div>
+                        <div>
 
 
-<p class="
+                            <p class="
 text-xs
 tracking-[0.3em]
 text-blue-200
 uppercase
 ">
 
-BPPMHKP SYSTEM
+                                BPPMHKP SYSTEM
 
-</p>
+                            </p>
 
 
 
-<h1 class="
+                            <h1 class="
 text-4xl
 font-bold
 mt-3
 ">
 
-Ocean Quality Control
+                                Ocean Quality Control
 
-</h1>
+                            </h1>
 
 
 
-<p class="
+                            <p class="
 mt-4
 text-blue-100
 max-w-xl
 ">
 
-Sistem monitoring pengujian mutu
-hasil kelautan dan perikanan
-secara digital dan terintegrasi.
+                                Sistem monitoring pengujian mutu
+                                hasil kelautan dan perikanan
+                                secara digital dan terintegrasi.
 
-</p>
-
-
-</div>
+                            </p>
 
 
+                        </div>
 
 
-<div class="
+
+
+                        <div class="
 bg-white/20
 backdrop-blur-xl
 rounded-2xl
@@ -111,12 +97,12 @@ py-4
 ">
 
 
-<p class="text-xs text-blue-100">
-SYSTEM STATUS
-</p>
+                            <p class="text-xs text-blue-100">
+                                SYSTEM STATUS
+                            </p>
 
 
-<div class="
+                            <div class="
 flex
 items-center
 gap-2
@@ -124,7 +110,7 @@ mt-2
 ">
 
 
-<div class="
+                                <div class="
 w-3
 h-3
 bg-green-400
@@ -133,31 +119,31 @@ animate-pulse
 "></div>
 
 
-<span class="font-bold">
+                                <span class="font-bold">
 
-ONLINE
+                                    ONLINE
 
-</span>
-
-
-</div>
+                                </span>
 
 
-</div>
+                            </div>
+
+
+                        </div>
 
 
 
-</div>
+                    </div>
 
 
-</div>
-
-
+                </div>
 
 
 
 
-<div class="
+
+
+                <div class="
 absolute
 right-0
 bottom-0
@@ -165,25 +151,23 @@ opacity-10
 ">
 
 
-<svg width="400" height="160">
+                    <svg width="400" height="160">
 
-<path 
-d="M0 100 Q100 20 200 100 T400 100"
-stroke="white"
-stroke-width="4"
-fill="none"/>
-
-
-</svg>
+                        <path
+                            d="M0 100 Q100 20 200 100 T400 100"
+                            stroke="white"
+                            stroke-width="4"
+                            fill="none" />
 
 
-</div>
+                    </svg>
+
+
+                </div>
 
 
 
-</div>
-
-
+            </div>
 
 
 
@@ -195,10 +179,12 @@ fill="none"/>
 
 
 
-{{-- MASTER CONTROL --}}
 
 
-<div class="
+            {{-- MASTER CONTROL --}}
+
+
+            <div class="
 bg-white
 rounded-3xl
 shadow-sm
@@ -207,37 +193,36 @@ mb-10
 ">
 
 
-<div class="flex justify-between items-center mb-6">
+                <div class="flex justify-between items-center mb-6">
 
 
-<h2 class="
+                    <h2 class="
 text-xl
 font-bold
 text-[#003B5C]
 ">
 
-Master Control
+                        Master Control
 
-</h2>
+                    </h2>
 
 
-<span class="
+                    <span class="
 text-xs
 text-gray-400
 ">
 
-Management System
 
-</span>
+                    </span>
 
 
-</div>
-
+                </div>
 
 
 
 
-<div class="
+
+                <div class="
 grid
 grid-cols-2
 md:grid-cols-4
@@ -248,8 +233,8 @@ gap-5
 
 
 
-<a href="{{route('admin.products.index')}}"
-class="
+                    <a href="{{route('admin.products.index')}}"
+                        class="
 group
 border
 rounded-2xl
@@ -260,38 +245,38 @@ transition
 ">
 
 
-<h3 class="
+                        <h3 class="
 font-bold
 text-[#003B5C]
 ">
 
-Produk
+                            Produk
 
-</h3>
+                        </h3>
 
 
-<p class="
+                        <p class="
 text-sm
 text-gray-400
 mt-2
 ">
 
-Data produk pengujian
+                            Data produk pengujian
 
-</p>
-
-
-</a>
+                        </p>
 
 
+                    </a>
 
 
 
 
 
 
-<a href="{{route('admin.samples.index')}}"
-class="
+
+
+                    <a href="{{route('admin.samples.index')}}"
+                        class="
 group
 border
 rounded-2xl
@@ -302,38 +287,38 @@ transition
 ">
 
 
-<h3 class="
+                        <h3 class="
 font-bold
 text-[#003B5C]
 ">
 
-Sample
+                            Sample
 
-</h3>
+                        </h3>
 
 
-<p class="
+                        <p class="
 text-sm
 text-gray-400
 mt-2
 ">
 
-Data sampel uji
+                            Data sampel uji
 
-</p>
-
-
-</a>
+                        </p>
 
 
+                    </a>
 
 
 
 
 
 
-<a href="{{route('admin.criteria_options.index')}}"
-class="
+
+
+                    <a href="{{route('admin.criteria_options.index')}}"
+                        class="
 group
 border
 rounded-2xl
@@ -344,38 +329,38 @@ transition
 ">
 
 
-<h3 class="
+                        <h3 class="
 font-bold
 text-[#003B5C]
 ">
 
-Penilaian
+                            Penilaian
 
-</h3>
+                        </h3>
 
 
-<p class="
+                        <p class="
 text-sm
 text-gray-400
 mt-2
 ">
 
-Parameter organoleptik
+                            Parameter organoleptik
 
-</p>
-
-
-</a>
+                        </p>
 
 
+                    </a>
 
 
 
 
 
 
-<a href="{{route('admin.users.index')}}"
-class="
+
+
+                    <a href="{{route('admin.users.index')}}"
+                        class="
 group
 border
 rounded-2xl
@@ -386,39 +371,37 @@ transition
 ">
 
 
-<h3 class="
+                        <h3 class="
 font-bold
 text-[#003B5C]
 ">
 
-User
+                            User
 
-</h3>
+                        </h3>
 
 
-<p class="
+                        <p class="
 text-sm
 text-gray-400
 mt-2
 ">
 
-Manajemen pengguna
+                            Manajemen pengguna
 
-</p>
-
-
-</a>
+                        </p>
 
 
+                    </a>
 
 
 
-</div>
 
 
-</div>
+                </div>
 
 
+            </div>
 
 
 
@@ -426,10 +409,12 @@ Manajemen pengguna
 
 
 
-{{-- STATISTIK --}}
 
 
-<div class="
+            {{-- STATISTIK --}}
+
+
+            <div class="
 grid
 grid-cols-1
 md:grid-cols-3
@@ -441,7 +426,7 @@ mb-10
 
 
 
-<div class="
+                <div class="
 bg-white
 rounded-3xl
 p-8
@@ -449,26 +434,26 @@ shadow-sm
 ">
 
 
-<p class="text-xs text-gray-400 uppercase">
+                    <p class="text-xs text-gray-400 uppercase">
 
-Panelis Aktif
+                        Panelis Aktif
 
-</p>
+                    </p>
 
 
-<h1 class="
+                    <h1 class="
 text-5xl
 font-bold
 text-[#003B5C]
 mt-3
 ">
 
-{{\App\Models\User::where('role','panelis')->count()}}
+                        {{\App\Models\User::where('role','panelis')->count()}}
 
-</h1>
+                    </h1>
 
 
-<div class="
+                    <div class="
 w-20
 h-1
 bg-[#0077B6]
@@ -476,14 +461,14 @@ mt-5
 "></div>
 
 
-</div>
+                </div>
 
 
 
 
 
 
-<div class="
+                <div class="
 bg-white
 rounded-3xl
 p-8
@@ -491,26 +476,26 @@ shadow-sm
 ">
 
 
-<p class="text-xs text-gray-400 uppercase">
+                    <p class="text-xs text-gray-400 uppercase">
 
-Sample Terdaftar
+                        Sample Terdaftar
 
-</p>
+                    </p>
 
 
-<h1 class="
+                    <h1 class="
 text-5xl
 font-bold
 text-[#003B5C]
 mt-3
 ">
 
-{{\App\Models\Sample::count()}}
+                        {{\App\Models\Sample::count()}}
 
-</h1>
+                    </h1>
 
 
-<div class="
+                    <div class="
 w-20
 h-1
 bg-[#00A896]
@@ -518,7 +503,7 @@ mt-5
 "></div>
 
 
-</div>
+                </div>
 
 
 
@@ -526,7 +511,7 @@ mt-5
 
 
 
-<div class="
+                <div class="
 bg-white
 rounded-3xl
 p-8
@@ -534,26 +519,26 @@ shadow-sm
 ">
 
 
-<p class="text-xs text-gray-400 uppercase">
+                    <p class="text-xs text-gray-400 uppercase">
 
-Total Pengujian
+                        Total Pengujian
 
-</p>
+                    </p>
 
 
-<h1 class="
+                    <h1 class="
 text-5xl
 font-bold
 text-[#003B5C]
 mt-3
 ">
 
-{{\App\Models\TestSession::count()}}
+                        {{\App\Models\TestSession::count()}}
 
-</h1>
+                    </h1>
 
 
-<div class="
+                    <div class="
 w-20
 h-1
 bg-[#F7941D]
@@ -561,12 +546,12 @@ mt-5
 "></div>
 
 
-</div>
+                </div>
 
 
 
 
-</div>
+            </div>
 
 
 
@@ -576,10 +561,10 @@ mt-5
 
 
 
-{{-- LIVE MONITOR --}}
+            {{-- LIVE MONITOR --}}
 
 
-<div class="
+            <div class="
 grid
 grid-cols-1
 lg:grid-cols-3
@@ -590,7 +575,7 @@ gap-8
 
 
 
-<div class="
+                <div class="
 lg:col-span-2
 bg-white
 rounded-3xl
@@ -599,25 +584,25 @@ shadow-sm
 ">
 
 
-<div class="
+                    <div class="
 flex
 justify-between
 mb-6
 ">
 
 
-<h2 class="
+                        <h2 class="
 text-xl
 font-bold
 text-[#003B5C]
 ">
 
-Live Testing Monitor
+                            Live Testing Monitor
 
-</h2>
+                        </h2>
 
 
-<span class="
+                        <span class="
 bg-green-100
 text-green-700
 px-3
@@ -626,55 +611,55 @@ rounded-full
 text-xs
 ">
 
-Realtime
+                            Realtime
 
-</span>
-
-
-</div>
+                        </span>
 
 
-
-
-
-@php
-
-$activeTest=
-\App\Models\TestSession::where('status','dibuka')
-->latest()
-->first();
-
-@endphp
+                    </div>
 
 
 
 
 
+                    @php
 
-@if($activeTest)
+                    $activeTest=
+                    \App\Models\TestSession::where('status','dibuka')
+                    ->latest()
+                    ->first();
+
+                    @endphp
 
 
-<h3 class="
+
+
+
+
+                    @if($activeTest)
+
+
+                    <h3 class="
 text-2xl
 font-bold
 text-[#003B5C]
 ">
 
-{{$activeTest->sample->product->nama_produk ?? '-'}}
+                        {{$activeTest->sample->product->nama_produk ?? '-'}}
 
-</h3>
-
-
-<p class="text-gray-500 mt-2">
-
-Tanggal :
-{{$activeTest->tanggal_pengujian}}
-
-</p>
+                    </h3>
 
 
+                    <p class="text-gray-500 mt-2">
 
-<div class="
+                        Tanggal :
+                        {{$activeTest->tanggal_pengujian}}
+
+                    </p>
+
+
+
+                    <div class="
 mt-6
 bg-[#F2FAFC]
 rounded-2xl
@@ -682,53 +667,53 @@ p-5
 ">
 
 
-Status Pengujian
+                        Status Pengujian
 
-<br>
+                        <br>
 
 
-<span class="
+                        <span class="
 text-green-600
 font-bold
 ">
 
-DIBUKA
+                            DIBUKA
 
-</span>
-
-
-</div>
+                        </span>
 
 
+                    </div>
 
-@else
 
 
-<div class="
+                    @else
+
+
+                    <div class="
 text-center
 text-gray-400
 py-10
 ">
 
-Tidak ada pengujian aktif
+                        Tidak ada pengujian aktif
 
-</div>
-
-
-
-@endif
+                    </div>
 
 
 
-</div>
+                    @endif
 
 
+
+                </div>
 
 
 
 
 
-<div class="
+
+
+                <div class="
 bg-[#003B5C]
 rounded-3xl
 p-8
@@ -736,93 +721,93 @@ text-white
 ">
 
 
-<h2 class="
+                    <h2 class="
 font-bold
 text-xl
 mb-8
 ">
 
-Quick Status
+                        Quick Status
 
-</h2>
-
-
-
-<div class="space-y-6">
-
-
-<div>
-
-<p class="text-blue-200 text-sm">
-
-Draft
-
-</p>
-
-<h2 class="text-4xl font-bold">
-
-{{\App\Models\TestSession::where('status','draft')->count()}}
-
-</h2>
-
-</div>
+                    </h2>
 
 
 
-<div>
-
-<p class="text-blue-200 text-sm">
-
-Berjalan
-
-</p>
-
-<h2 class="text-4xl font-bold">
-
-{{\App\Models\TestSession::where('status','dibuka')->count()}}
-
-</h2>
-
-</div>
+                    <div class="space-y-6">
 
 
+                        <div>
 
-<div>
+                            <p class="text-blue-200 text-sm">
 
-<p class="text-blue-200 text-sm">
+                                Draft
 
-Selesai
+                            </p>
 
-</p>
+                            <h2 class="text-4xl font-bold">
 
-<h2 class="text-4xl font-bold">
+                                {{\App\Models\TestSession::where('status','draft')->count()}}
 
-{{\App\Models\TestSession::where('status','selesai')->count()}}
+                            </h2>
 
-</h2>
-
-</div>
-
-
-</div>
-
-
-</div>
+                        </div>
 
 
 
+                        <div>
+
+                            <p class="text-blue-200 text-sm">
+
+                                Berjalan
+
+                            </p>
+
+                            <h2 class="text-4xl font-bold">
+
+                                {{\App\Models\TestSession::where('status','dibuka')->count()}}
+
+                            </h2>
+
+                        </div>
 
 
 
-</div>
+                        <div>
+
+                            <p class="text-blue-200 text-sm">
+
+                                Selesai
+
+                            </p>
+
+                            <h2 class="text-4xl font-bold">
+
+                                {{\App\Models\TestSession::where('status','selesai')->count()}}
+
+                            </h2>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
 
 
 
 
 
-</div>
 
-</div>
+            </div>
+
+
+
+
+
+        </div>
+
+    </div>
 
 
 </x-app-layout>

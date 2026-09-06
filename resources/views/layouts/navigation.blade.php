@@ -56,7 +56,21 @@ class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
                 </a>
 
 
+                    {{-- Menu Pimpinan --}}
 
+                @if(auth()->user()->role === 'pimpinan')
+
+
+                <a href="{{ route('pimpinan.monitoring.index') }}"
+
+                class="inline-flex items-center px-1 pt-1 text-sm font-medium">
+
+                    Monitoring
+
+                </a>
+
+
+                @endif
 
 
                 {{-- Menu Admin --}}
@@ -261,7 +275,21 @@ class="hidden sm:hidden">
     </div>
 
 
+@if(auth()->user()->role === 'pimpinan')
 
+
+<a href="{{ route('pimpinan.monitoring.index') }}"
+
+class="block px-4 py-2 text-gray-700">
+
+
+    Monitoring
+
+
+</a>
+
+
+@endif
 
 
     <div class="border-t pt-4 pb-3">

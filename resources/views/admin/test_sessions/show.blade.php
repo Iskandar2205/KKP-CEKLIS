@@ -1,37 +1,37 @@
 <x-app-layout>
 
 
-<x-slot name="header">
+    <x-slot name="header">
 
-<h2 class="font-semibold text-xl text-gray-800">
+        <h2 class="font-semibold text-xl text-gray-800">
 
-Detail Sesi Pengujian
+            Detail Sesi Pengujian
 
-</h2>
+        </h2>
 
-</x-slot>
+    </x-slot>
 
 
 
 
 
-<div class="py-12">
+    <div class="py-12">
 
 
-<div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
 
-<div class="bg-white shadow-sm rounded-lg p-6">
+            <div class="bg-white shadow-sm rounded-lg p-6">
 
 
 
 
 
-<h3 class="text-xl font-bold mb-6">
+                <h3 class="text-xl font-bold mb-6">
 
-{{ $testSession->sample->product->nama_produk }}
+                    {{ $testSession->sample->product->nama_produk }}
 
-</h3>
+                </h3>
 
 
 
@@ -40,30 +40,30 @@ Detail Sesi Pengujian
 
 
 
-{{-- Informasi Pengujian --}}
+                {{-- Informasi Pengujian --}}
 
 
-<table class="w-full border-collapse border">
+                <table class="w-full border-collapse border">
 
 
 
-<tr>
+                    <tr>
 
-<td class="border p-3 font-bold w-1/3">
+                        <td class="border p-3 font-bold w-1/3">
 
-Nomor Sample
+                            Nomor Sample
 
-</td>
+                        </td>
 
 
-<td class="border p-3">
+                        <td class="border p-3">
 
-{{ $testSession->sample->nomor_sample }}
+                            {{ $testSession->sample->nomor_sample }}
 
-</td>
+                        </td>
 
 
-</tr>
+                    </tr>
 
 
 
@@ -72,23 +72,23 @@ Nomor Sample
 
 
 
-<tr>
+                    <tr>
 
-<td class="border p-3 font-bold">
+                        <td class="border p-3 font-bold">
 
-Tanggal Pengujian
+                            Tanggal Pengujian
 
-</td>
+                        </td>
 
 
-<td class="border p-3">
+                        <td class="border p-3">
 
-{{ \Carbon\Carbon::parse($testSession->tanggal_pengujian)->format('d-m-Y') }}
+                            {{ \Carbon\Carbon::parse($testSession->tanggal_pengujian)->format('d-m-Y') }}
 
-</td>
+                        </td>
 
 
-</tr>
+                    </tr>
 
 
 
@@ -97,60 +97,60 @@ Tanggal Pengujian
 
 
 
-<tr>
+                    <tr>
 
-<td class="border p-3 font-bold">
+                        <td class="border p-3 font-bold">
 
-Status
+                            Status
 
-</td>
+                        </td>
 
 
-<td class="border p-3">
+                        <td class="border p-3">
 
 
 
-@if($testSession->status == 'draft')
+                            @if($testSession->status == 'draft')
 
 
-<span class="bg-yellow-200 text-yellow-800 px-3 py-1 rounded-full">
+                            <span class="bg-yellow-200 text-yellow-800 px-3 py-1 rounded-full">
 
-Draft
+                                Draft
 
-</span>
+                            </span>
 
 
 
-@elseif($testSession->status == 'dibuka')
+                            @elseif($testSession->status == 'dibuka')
 
 
-<span class="bg-green-200 text-green-800 px-3 py-1 rounded-full">
+                            <span class="bg-green-200 text-green-800 px-3 py-1 rounded-full">
 
-Dibuka
+                                Dibuka
 
-</span>
+                            </span>
 
 
 
-@else
+                            @else
 
 
-<span class="bg-gray-200 text-gray-800 px-3 py-1 rounded-full">
+                            <span class="bg-gray-200 text-gray-800 px-3 py-1 rounded-full">
 
-Selesai
+                                Selesai
 
-</span>
+                            </span>
 
 
 
-@endif
+                            @endif
 
 
 
-</td>
+                        </td>
 
 
-</tr>
+                    </tr>
 
 
 
@@ -159,27 +159,27 @@ Selesai
 
 
 
-<tr>
+                    <tr>
 
-<td class="border p-3 font-bold">
+                        <td class="border p-3 font-bold">
 
-Catatan
+                            Catatan
 
-</td>
+                        </td>
 
 
-<td class="border p-3">
+                        <td class="border p-3">
 
-{{ $testSession->catatan ?? '-' }}
+                            {{ $testSession->catatan ?? '-' }}
 
-</td>
+                        </td>
 
 
-</tr>
+                    </tr>
 
 
 
-</table>
+                </table>
 
 
 
@@ -189,7 +189,7 @@ Catatan
 
 
 
-<hr class="my-8">
+                <hr class="my-8">
 
 
 
@@ -197,14 +197,14 @@ Catatan
 
 
 
-{{-- Tim Pengujian --}}
+                {{-- Tim Pengujian --}}
 
 
-<h3 class="text-lg font-bold mb-4">
+                <h3 class="text-lg font-bold mb-4">
 
-Tim Pengujian
+                    Tim Pengujian
 
-</h3>
+                </h3>
 
 
 
@@ -213,33 +213,33 @@ Tim Pengujian
 
 
 
-<table class="w-full border-collapse border">
+                <table class="w-full border-collapse border">
 
 
-<thead>
+                    <thead>
 
 
-<tr class="bg-gray-100">
+                        <tr class="bg-gray-100">
 
 
-<th class="border p-3">
+                            <th class="border p-3">
 
-Nama
+                                Nama
 
-</th>
+                            </th>
 
 
-<th class="border p-3">
+                            <th class="border p-3">
 
-Peran
+                                Peran
 
-</th>
+                            </th>
 
 
-</tr>
+                        </tr>
 
 
-</thead>
+                    </thead>
 
 
 
@@ -247,89 +247,89 @@ Peran
 
 
 
-<tbody>
+                    <tbody>
 
 
 
-@forelse($testSession->sessionUsers as $user)
+                        @forelse($testSession->sessionUsers as $user)
 
 
 
-<tr>
+                        <tr>
 
 
-<td class="border p-3">
+                            <td class="border p-3">
 
 
-@if($user->nama)
+                                @if($user->nama)
 
 
-    {{ $user->nama }}
+                                {{ $user->nama }}
 
 
-@elseif($user->user)
+                                @elseif($user->user)
 
 
-    {{ $user->user->name }}
+                                {{ $user->user->name }}
 
 
-@else
+                                @else
 
 
-    -
+                                -
 
 
-@endif
+                                @endif
 
 
 
-</td>
+                            </td>
 
 
 
-<td class="border p-3">
+                            <td class="border p-3">
 
 
-{{ ucfirst($user->role) }}
+                                {{ ucfirst($user->role) }}
 
 
-</td>
+                            </td>
 
 
 
-</tr>
+                        </tr>
 
 
 
-@empty
+                        @empty
 
 
-<tr>
+                        <tr>
 
 
-<td colspan="2" class="border p-3 text-center text-gray-500">
+                            <td colspan="2" class="border p-3 text-center text-gray-500">
 
 
-Belum ada anggota tim pengujian
+                                Belum ada anggota tim pengujian
 
 
-</td>
+                            </td>
 
 
-</tr>
+                        </tr>
 
 
 
-@endforelse
+                        @endforelse
 
 
 
 
 
-</tbody>
+                    </tbody>
 
 
-</table>
+                </table>
 
 
 
@@ -337,15 +337,15 @@ Belum ada anggota tim pengujian
 
 
 
-<a href="{{ route('admin.test_sessions.index') }}"
+                <a href="{{ route('admin.test_sessions.index') }}"
 
-class="inline-block mt-6 bg-gray-500 text-white px-4 py-2 rounded">
+                    class="inline-block mt-6 bg-gray-500 text-white px-4 py-2 rounded">
 
 
-Kembali
+                    Kembali
 
 
-</a>
+                </a>
 
 
 
@@ -353,13 +353,13 @@ Kembali
 
 
 
-</div>
+            </div>
 
 
-</div>
+        </div>
 
 
-</div>
+    </div>
 
 
 </x-app-layout>

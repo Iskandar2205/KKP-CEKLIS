@@ -1,34 +1,34 @@
 <x-app-layout>
 
 
-<x-slot name="header">
+    <x-slot name="header">
 
-<div>
+        <div>
 
-<h2 class="text-2xl font-bold text-[#003B5C]">
-Template Penilaian Organoleptik
-</h2>
+            <h2 class="text-2xl font-bold text-[#003B5C]">
+                Template Penilaian Organoleptik
+            </h2>
 
-<p class="text-sm text-gray-500">
-Upload template form penilaian organoleptik
-</p>
+            <p class="text-sm text-gray-500">
+                Upload template form penilaian organoleptik
+            </p>
 
-</div>
+        </div>
 
-</x-slot>
-
-
-
-<div class="min-h-screen bg-[#F2FAFC] py-10">
-
-
-<div class="max-w-5xl mx-auto px-6">
+    </x-slot>
 
 
 
-{{-- HEADER --}}
+    <div class="min-h-screen bg-[#F2FAFC] py-10">
 
-<div class="
+
+        <div class="max-w-5xl mx-auto px-6">
+
+
+
+            {{-- HEADER --}}
+
+            <div class="
 bg-gradient-to-r
 from-[#003B5C]
 to-[#0077B6]
@@ -40,48 +40,48 @@ mb-8
 ">
 
 
-<p class="
+                <p class="
 text-xs
 uppercase
 tracking-widest
 text-blue-200
 ">
 
-TEMPLATE PRODUK
+                    TEMPLATE PRODUK
 
-</p>
+                </p>
 
 
-<h1 class="
+                <h1 class="
 text-3xl
 font-bold
 mt-3
 ">
 
-{{ $product->nama_produk }}
+                    {{ $product->nama_produk }}
 
-</h1>
+                </h1>
 
 
-<p class="
+                <p class="
 mt-3
 text-blue-100
 ">
 
-Upload template Excel score sheet sebagai dasar form penilaian panelis.
+                    Upload template Excel score sheet sebagai dasar form penilaian panelis.
 
-</p>
-
-
-</div>
+                </p>
 
 
+            </div>
 
 
 
-@if(session('success'))
 
-<div class="
+
+            @if(session('success'))
+
+            <div class="
 bg-green-100
 border
 border-green-300
@@ -91,19 +91,19 @@ rounded-xl
 mb-6
 ">
 
-{{ session('success') }}
+                {{ session('success') }}
 
-</div>
+            </div>
 
-@endif
-
-
+            @endif
 
 
 
-{{-- UPLOAD TEMPLATE --}}
 
-<div class="
+
+            {{-- UPLOAD TEMPLATE --}}
+
+            <div class="
 bg-white
 rounded-3xl
 shadow-lg
@@ -111,44 +111,44 @@ p-8
 ">
 
 
-<h2 class="
+                <h2 class="
 text-xl
 font-bold
 text-[#003B5C]
 mb-2
 ">
 
-Upload Template Penilaian
+                    Upload Template Penilaian
 
-</h2>
+                </h2>
 
 
-<p class="
+                <p class="
 text-gray-500
 mb-6
 ">
 
-Gunakan file Excel template score sheet hasil uji organoleptik.
+                    Gunakan file Excel template score sheet hasil uji organoleptik.
 
-</p>
-
-
-
-
-<form
-
-action="{{ route('admin.products.dataset.import',$product->id) }}"
-
-method="POST"
-
-enctype="multipart/form-data">
-
-
-@csrf
+                </p>
 
 
 
-<div class="
+
+                <form
+
+                    action="{{ route('admin.products.dataset.import',$product->id) }}"
+
+                    method="POST"
+
+                    enctype="multipart/form-data">
+
+
+                    @csrf
+
+
+
+                    <div class="
 border-2
 border-dashed
 border-[#0077B6]
@@ -159,46 +159,46 @@ bg-[#F7FCFD]
 ">
 
 
-<div class="text-5xl mb-4">
+                        <div class="text-5xl mb-4">
 
-📄
+                            📄
 
-</div>
+                        </div>
 
 
 
-<h3 class="
+                        <h3 class="
 font-bold
 text-[#003B5C]
 ">
 
-Upload File Template
+                            Upload File Template
 
-</h3>
+                        </h3>
 
 
-<p class="
+                        <p class="
 text-sm
 text-gray-500
 mt-2
 mb-5
 ">
 
-File Excel template penilaian organoleptik (.xlsx / .xls)
+                            File Excel template penilaian organoleptik (.xlsx / .xls)
 
-</p>
+                        </p>
 
 
 
-<input
+                        <input
 
-type="file"
+                            type="file"
 
-name="file"
+                            name="file"
 
-accept=".xlsx,.xls"
+                            accept=".xlsx,.xls"
 
-class="
+                            class="
 mx-auto
 border
 rounded-xl
@@ -206,23 +206,21 @@ p-3
 w-full
 "
 
-required
-
->
+                            required>
 
 
 
-</div>
+                    </div>
 
 
 
 
 
-<button
+                    <button
 
-type="submit"
+                        type="submit"
 
-class="
+                        class="
 mt-6
 bg-[#0077B6]
 text-white
@@ -234,30 +232,30 @@ hover:bg-[#005B8A]
 transition
 ">
 
-Upload Template
+                        Upload Template
 
-</button>
-
-
-
-</form>
+                    </button>
 
 
 
-</div>
+                </form>
 
 
+
+            </div>
 
 
 
 
-{{-- INFORMASI TEMPLATE TERUPLOAD --}}
 
 
-@if(isset($template) && $template)
+            {{-- INFORMASI TEMPLATE TERUPLOAD --}}
 
 
-<div class="
+            @if(isset($template) && $template)
+
+
+            <div class="
 bg-blue-50
 border
 border-blue-200
@@ -267,46 +265,46 @@ mt-8
 ">
 
 
-<h3 class="
+                <h3 class="
 font-bold
 text-[#003B5C]
 ">
 
-Template Aktif
+                    Template Aktif
 
-</h3>
-
-
-<p class="text-sm text-gray-600 mt-2">
-
-Nama File :
-
-<b>
-{{ $template->file_template }}
-</b>
-
-</p>
+                </h3>
 
 
-</div>
+                <p class="text-sm text-gray-600 mt-2">
+
+                    Nama File :
+
+                    <b>
+                        {{ $template->file_template }}
+                    </b>
+
+                </p>
 
 
-@endif
+            </div>
 
 
+            @endif
 
 
 
 
 
-{{-- PREVIEW EXCEL --}}
 
 
-@if(isset($rows) && count($rows) > 0)
+            {{-- PREVIEW EXCEL --}}
+
+
+            @if(isset($rows) && count($rows) > 0)
 
 
 
-<div class="
+            <div class="
 bg-white
 rounded-3xl
 shadow-lg
@@ -315,42 +313,42 @@ mt-8
 ">
 
 
-<h2 class="
+                <h2 class="
 text-xl
 font-bold
 text-[#003B5C]
 mb-5
 ">
 
-Preview Isi Template Excel
+                    Preview Isi Template Excel
 
-</h2>
-
-
-
-<div class="overflow-x-auto">
+                </h2>
 
 
-<table class="
+
+                <div class="overflow-x-auto">
+
+
+                    <table class="
 min-w-full
 border
 border-gray-300
 ">
 
 
-<tbody>
+                        <tbody>
 
 
-@foreach($rows as $row)
+                            @foreach($rows as $row)
 
 
-<tr>
+                            <tr>
 
 
-@foreach($row as $cell)
+                                @foreach($row as $cell)
 
 
-<td class="
+                                <td class="
 border
 px-4
 py-2
@@ -358,39 +356,39 @@ text-sm
 whitespace-nowrap
 ">
 
-{{ $cell }}
+                                    {{ $cell }}
 
-</td>
-
-
-@endforeach
+                                </td>
 
 
-</tr>
+                                @endforeach
 
 
-@endforeach
+                            </tr>
 
 
-
-</tbody>
-
-
-</table>
-
-
-</div>
+                            @endforeach
 
 
 
-</div>
+                        </tbody>
+
+
+                    </table>
+
+
+                </div>
 
 
 
-@else
+            </div>
 
 
-<div class="
+
+            @else
+
+
+            <div class="
 bg-gray-50
 border
 border-gray-200
@@ -400,24 +398,24 @@ mt-8
 text-gray-500
 ">
 
-Belum ada preview template Excel.
+                Belum ada preview template Excel.
 
-Silakan upload file Excel terlebih dahulu.
+                Silakan upload file Excel terlebih dahulu.
 
-</div>
-
-
-@endif
+            </div>
 
 
+            @endif
 
 
 
 
-</div>
 
 
-</div>
+        </div>
+
+
+    </div>
 
 
 </x-app-layout>

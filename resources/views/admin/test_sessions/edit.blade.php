@@ -1,93 +1,93 @@
 <x-app-layout>
 
-<x-slot name="header">
+    <x-slot name="header">
 
-<h2 class="font-semibold text-xl text-gray-800">
-Edit Sesi Pengujian
-</h2>
+        <h2 class="font-semibold text-xl text-gray-800">
+            Edit Sesi Pengujian
+        </h2>
 
-</x-slot>
+    </x-slot>
 
 
 
-<div class="py-12">
+    <div class="py-12">
 
-<div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
 
-<div class="bg-white shadow rounded-lg p-6">
+            <div class="bg-white shadow rounded-lg p-6">
 
 
 
-<form action="{{ route('admin.test_sessions.update',$testSession->id) }}"
-method="POST">
+                <form action="{{ route('admin.test_sessions.update',$testSession->id) }}"
+                    method="POST">
 
-@csrf
-@method('PUT')
+                    @csrf
+                    @method('PUT')
 
 
 
-<div class="mb-4">
+                    <div class="mb-4">
 
-<label class="block font-medium mb-2">
-Pilih Sample
-</label>
+                        <label class="block font-medium mb-2">
+                            Pilih Sample
+                        </label>
 
 
-<select name="sample_id"
-class="w-full border rounded p-2">
+                        <select name="sample_id"
+                            class="w-full border rounded p-2">
 
 
-@foreach($samples as $sample)
+                            @foreach($samples as $sample)
 
 
-<option value="{{ $sample->id }}"
+                            <option value="{{ $sample->id }}"
 
-@if($sample->id == $testSession->sample_id)
-selected
-@endif
+                                @if($sample->id == $testSession->sample_id)
+                                selected
+                                @endif
 
->
+                                >
 
-{{ $sample->product->nama_produk }}
--
-{{ $sample->nomor_sample }}
+                                {{ $sample->product->nama_produk }}
+                                -
+                                {{ $sample->nomor_sample }}
 
-</option>
+                            </option>
 
 
-@endforeach
+                            @endforeach
 
 
-</select>
+                        </select>
 
 
-</div>
+                    </div>
 
 
 
 
 
-<div class="mb-4">
+                    <div class="mb-4">
 
 
-<label class="block font-medium mb-2">
+                        <label class="block font-medium mb-2">
 
-Tanggal Pengujian
+                            Tanggal Pengujian
 
-</label>
+                        </label>
 
 
-<input type="date"
+                        <input type="date"
 
-name="tanggal_pengujian"
+                            name="tanggal_pengujian"
 
-value="{{ $testSession->tanggal_pengujian }}"
+                            value="{{ $testSession->tanggal_pengujian }}"
 
-class="w-full border rounded p-2">
+                            class="w-full border rounded p-2">
 
 
-</div>
+                    </div>
 
 
 
@@ -95,55 +95,55 @@ class="w-full border rounded p-2">
 
 
 
-<div class="mb-4">
+                    <div class="mb-4">
 
 
-<label class="block font-medium mb-2">
+                        <label class="block font-medium mb-2">
 
-Status
+                            Status
 
-</label>
+                        </label>
 
 
-<select name="status"
+                        <select name="status"
 
-class="w-full border rounded p-2">
+                            class="w-full border rounded p-2">
 
 
-<option value="draft"
-@if($testSession->status=='draft')
-selected
-@endif
->
-Draft
-</option>
+                            <option value="draft"
+                                @if($testSession->status=='draft')
+                                selected
+                                @endif
+                                >
+                                Draft
+                            </option>
 
 
 
-<option value="dibuka"
-@if($testSession->status=='dibuka')
-selected
-@endif
->
-Dibuka
-</option>
+                            <option value="dibuka"
+                                @if($testSession->status=='dibuka')
+                                selected
+                                @endif
+                                >
+                                Dibuka
+                            </option>
 
 
 
-<option value="selesai"
-@if($testSession->status=='selesai')
-selected
-@endif
->
-Selesai
-</option>
+                            <option value="selesai"
+                                @if($testSession->status=='selesai')
+                                selected
+                                @endif
+                                >
+                                Selesai
+                            </option>
 
 
 
-</select>
+                        </select>
 
 
-</div>
+                    </div>
 
 
 
@@ -151,64 +151,62 @@ Selesai
 
 
 
-<div class="mb-4">
+                    <div class="mb-4">
 
 
-<label class="block font-medium mb-2">
+                        <label class="block font-medium mb-2">
 
-Catatan
+                            Catatan
 
-</label>
+                        </label>
 
 
-<textarea
+                        <textarea
 
-name="catatan"
+                            name="catatan"
 
-class="w-full border rounded p-2"
+                            class="w-full border rounded p-2">{{ $testSession->catatan }}</textarea>
 
->{{ $testSession->catatan }}</textarea>
 
+                    </div>
 
-</div>
 
 
 
 
 
 
+                    <button
 
-<button
+                        class="bg-blue-600 text-white px-4 py-2 rounded">
 
-class="bg-blue-600 text-white px-4 py-2 rounded">
+                        Update
 
-Update
+                    </button>
 
-</button>
 
 
 
+                    <a href="{{ route('admin.test_sessions.index') }}"
 
-<a href="{{ route('admin.test_sessions.index') }}"
+                        class="ml-2 bg-gray-500 text-white px-4 py-2 rounded">
 
-class="ml-2 bg-gray-500 text-white px-4 py-2 rounded">
+                        Kembali
 
-Kembali
+                    </a>
 
-</a>
 
 
+                </form>
 
-</form>
 
 
+            </div>
 
-</div>
 
+        </div>
 
-</div>
-
-</div>
+    </div>
 
 
 </x-app-layout>
