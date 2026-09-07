@@ -8,6 +8,9 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\TestSession;
 use App\Models\Sample;
 use App\Models\User;
+use App\Models\AssessmentTemplate;
+use App\Models\TestResult;
+use App\Models\SessionUser;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 
@@ -17,16 +20,17 @@ class TestSessionController extends Controller
 {
 
 
-    /**
-     * Menampilkan semua sesi pengujian
-     */
     public function index()
     {
 
 
-        $sessions = TestSession::with('sample.product')
-            ->latest()
-            ->get();
+    $sessions = TestSession::with([
+    'sample.product',
+    'assessmentTemplate',
+    'sessionUsers.user'
+])
+->latest()
+->get();
 
 
 
@@ -42,223 +46,265 @@ class TestSessionController extends Controller
 
 
 
-    /**
-     * Form tambah sesi
-     */
-    public function create()
+  public function create()
+{
+    $samples = Sample::with('product')->get();
+
+    $templates = AssessmentTemplate::all();
+
+    $panelis = User::where('role', 'panelis')
+        ->where('status', 'aktif')
+        ->get();
+
+    $penyelia = User::where('role', 'penyelia')
+        ->where('status', 'aktif')
+        ->get();
+
+    return view(
+        'admin.test_sessions.create',
+        compact(
+            'samples',
+            'templates',
+            'panelis',
+            'penyelia'
+        )
+    );
+}
+
+ public function store(Request $request)
+{
+
+
+    $validated = $request->validate([
+
+
+        'sample_id' => [
+            'required',
+            'exists:samples,id'
+        ],
+
+
+        'assessment_template_id' => [
+            'required',
+            'exists:assessment_templates,id'
+        ],
+
+
+        'tanggal_pengujian' => [
+            'required',
+            'date'
+        ],
+
+
+        'status' => [
+            'required',
+            'in:draft,dibuka,selesai'
+        ],
+
+
+        'catatan' => [
+            'nullable',
+            'string'
+        ],
+
+
+        'panelis' => [
+            'required',
+            'array'
+        ],
+
+
+        'panelis.*' => [
+            'nullable',
+            'exists:users,id'
+        ],
+
+
+        'penyelia' => [
+            'nullable',
+            'exists:users,id'
+        ],
+
+
+    ]);
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Simpan Test Session
+    |--------------------------------------------------------------------------
+    */
+
+
+    $session = TestSession::create([
+
+
+        'sample_id'
+            =>
+        $request->sample_id,
+
+
+        'assessment_template_id'
+            =>
+        $request->assessment_template_id,
+
+
+        'tanggal_pengujian'
+            =>
+        $request->tanggal_pengujian,
+
+
+        'status'
+            =>
+        $request->status,
+
+
+        'catatan'
+            =>
+        $request->catatan,
+
+
+    ]);
+
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Simpan Panelis
+    |--------------------------------------------------------------------------
+    */
+
+
+    foreach($request->panelis as $panelisId)
     {
 
 
-        $samples = Sample::with('product')
-            ->get();
+        if($panelisId)
+        {
+
+
+            $user = User::find($panelisId);
 
 
 
-        $panelis = User::where('role', 'panelis')
-            ->where('status', 'aktif')
-            ->get();
+            SessionUser::create([
+
+
+                'test_session_id'
+                    =>
+                $session->id,
+
+
+                'user_id'
+                    =>
+                $panelisId,
+
+
+                'nama'
+                    =>
+                $user->name,
+
+
+                'role'
+                    =>
+                'panelis'
+
+
+            ]);
+
+
+        }
+
+
+    }
 
 
 
-        $penyelia = User::where('role', 'penyelia')
-            ->where('status', 'aktif')
-            ->get();
 
 
 
-        return view(
 
-            'admin.test_sessions.create',
 
-            compact(
-                'samples',
-                'panelis',
-                'penyelia'
-            )
 
+    /*
+    |--------------------------------------------------------------------------
+    | Simpan Penyelia
+    |--------------------------------------------------------------------------
+    */
+
+
+    if($request->penyelia)
+    {
+
+
+        $user = User::find($request->penyelia);
+
+
+
+        SessionUser::create([
+
+
+            'test_session_id'
+                =>
+            $session->id,
+
+
+            'user_id'
+                =>
+            $request->penyelia,
+
+
+            'nama'
+                =>
+            $user->name,
+
+
+            'role'
+                =>
+            'penyelia'
+
+
+        ]);
+
+    }
+
+
+
+
+
+
+
+
+
+    return redirect()
+
+        ->route('admin.test_sessions.index')
+
+        ->with(
+            'success',
+            'Sesi pengujian berhasil dibuat'
         );
-    }
 
+}
 
 
 
-    /**
-     * Simpan sesi pengujian
-     */
-    public function store(Request $request)
-    {
 
 
-        $validated = $request->validate([
 
 
-            'sample_id' => [
-                'required',
-                'exists:samples,id'
-            ],
-
-
-            'tanggal_pengujian' => [
-                'required',
-                'date'
-            ],
-
-
-            'status' => [
-                'required',
-                'in:draft,dibuka,selesai'
-            ],
-
-
-            'catatan' => [
-                'nullable',
-                'string'
-            ],
-
-
-
-            'panelis' => [
-                'required',
-                'array'
-            ],
-
-
-
-            'panelis.*' => [
-                'required',
-                'exists:users,id'
-            ],
-
-
-
-            'penyelia' => [
-                'nullable',
-                'exists:users,id'
-            ],
-
-
-        ]);
-
-
-
-
-
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Simpan Test Session
-        |--------------------------------------------------------------------------
-        */
-
-
-        $session = TestSession::create([
-
-
-            'sample_id' => $request->sample_id,
-
-
-            'tanggal_pengujian' => $request->tanggal_pengujian,
-
-
-            'status' => $request->status,
-
-
-            'catatan' => $request->catatan,
-
-
-        ]);
-
-
-
-
-
-
-
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Simpan Panelis
-        |--------------------------------------------------------------------------
-        */
-
-
-        foreach ($request->panelis as $panelisId) {
-
-
-            $session->sessionUsers()->create([
-
-
-                'user_id' => $panelisId,
-
-
-                'role' => 'panelis'
-
-
-            ]);
-        }
-
-
-
-
-
-
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Simpan Penyelia
-        |--------------------------------------------------------------------------
-        */
-
-
-        if ($request->penyelia) {
-
-
-            $session->sessionUsers()->create([
-
-
-                'user_id' => $request->penyelia,
-
-
-                'role' => 'penyelia'
-
-
-            ]);
-        }
-
-
-
-
-
-
-
-
-        return redirect()
-
-            ->route('admin.test_sessions.index')
-
-            ->with(
-                'success',
-                'Sesi pengujian berhasil dibuat'
-            );
-    }
-
-
-
-
-
-
-
-
-
-    /**
-     * Detail sesi pengujian
-     */
     public function show(TestSession $testSession)
     {
 
@@ -291,9 +337,6 @@ class TestSessionController extends Controller
 
 
 
-    /**
-     * Form edit sesi
-     */
     public function edit(TestSession $testSession)
     {
 
@@ -342,9 +385,6 @@ class TestSessionController extends Controller
 
 
 
-    /**
-     * Update sesi
-     */
     public function update(Request $request, TestSession $testSession)
     {
 
@@ -375,8 +415,32 @@ class TestSessionController extends Controller
                 'string'
             ],
 
-
         ]);
+
+
+
+
+
+        /*
+        Update template jika sample berubah
+        */
+
+
+        $sample = Sample::findOrFail(
+            $request->sample_id
+        );
+
+
+        $template = AssessmentTemplate::where(
+            'product_id',
+            $sample->product_id
+        )
+        ->first();
+
+
+
+        $validated['assessment_template_id'] =
+            $template?->id;
 
 
 
@@ -406,9 +470,6 @@ class TestSessionController extends Controller
 
 
 
-    /**
-     * Membuka sesi
-     */
     public function open(TestSession $testSession)
     {
 
@@ -439,9 +500,6 @@ class TestSessionController extends Controller
 
 
 
-    /**
-     * Menyelesaikan sesi
-     */
     public function finish(TestSession $testSession)
     {
 
@@ -464,141 +522,353 @@ class TestSessionController extends Controller
             );
     }
 
-    /**
-     * Menampilkan hasil penilaian organoleptik
-     */
-    public function results(TestSession $testSession)
+
+ public function results(TestSession $testSession)
+{
+
+
+    $testSession->load([
+
+
+        'sample.product',
+
+
+        'assessmentTemplate.criterias',
+
+
+        'assessments.user',
+
+
+        'assessments.details.criteria',
+
+
+        'testResult'
+
+
+    ]);
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Ambil parameter sesuai dataset/template aktif
+    |--------------------------------------------------------------------------
+    */
+
+
+    $criteriaList = collect();
+
+
+
+    if($testSession->assessmentTemplate)
     {
+
+
+        $criteriaList =
+
+            $testSession
+            ->assessmentTemplate
+            ->criterias;
+
+
+    }
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Hitung hasil pengujian
+    |--------------------------------------------------------------------------
+    */
+
+
+    $jumlahPanelis =
+
+        $testSession
+        ->assessments
+        ->count();
+
+
+
+    $jumlahParameter =
+
+        $criteriaList
+        ->count();
+
+
+
+    $totalNilai =
+
+        $testSession
+        ->assessments
+        ->sum('total_nilai');
+
+
+
+
+
+
+    if(
+
+        $jumlahPanelis > 0
+
+        &&
+
+        $jumlahParameter > 0
+
+    )
+
+    {
+
+
+        $rataRata =
+
+            $totalNilai /
+
+            (
+
+                $jumlahPanelis *
+
+                $jumlahParameter
+
+            );
+
+
+    }
+
+    else
+
+    {
+
+
+        $rataRata = 0;
+
+
+    }
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Simpan hasil ke tabel test_results
+    |--------------------------------------------------------------------------
+    */
+
+
+    TestResult::updateOrCreate(
+
+        [
+
+            'test_session_id'=>$testSession->id
+
+        ],
+
+
+        [
+
+
+            'jumlah_panelis'=>$jumlahPanelis,
+
+
+            'jumlah_parameter'=>$jumlahParameter,
+
+
+            'total_nilai'=>$totalNilai,
+
+
+            'rata_rata_produk'=>$rataRata,
+
+
+            'nilai_mutu'=>
+
+                round(
+                    $rataRata * 2
+                ) / 2,
+
+
+
+            'kategori'=>
+
+                $rataRata >= 7
+
+                ?
+
+                'Baik'
+
+                :
+
+                'Cukup'
+
+
+        ]
+
+
+    );
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Refresh data hasil
+    |--------------------------------------------------------------------------
+    */
+
+
+    $testSession->load('testResult');
+
+
+
+
+
+
+
+    return view(
+
+        'admin.test_sessions.results',
+
+
+        compact(
+
+            'testSession',
+
+            'criteriaList',
+
+            'jumlahPanelis',
+
+            'rataRata'
+
+        )
+
+    );
+
+
+}
+
+
+
+
+    public function exportPdf(TestSession $testSession)
+    {
+
 
         $testSession->load([
 
             'sample.product',
 
+            'assessmentTemplate.criterias',
+
             'assessments.user',
 
-            'assessments.details.criteria'
+            'assessments.details.criteria',
+
+            'testResult'
 
         ]);
 
 
 
-        $assessments = $testSession->assessments;
+$criteriaList = collect();
 
 
+if($testSession->assessmentTemplate)
+{
 
-        $criteriaList = collect();
+    $criteriaList =
+        $testSession
+        ->assessmentTemplate
+        ->criterias;
 
-
-
-        foreach ($assessments as $assessment) {
-
-            foreach ($assessment->details as $detail) {
-
-                $criteriaList->push(
-                    $detail->criteria
-                );
-            }
-        }
+}
 
 
+        $jumlahPanelis =
 
-        $criteriaList = $criteriaList
-            ->unique('id')
-            ->values();
-
-
-
-        $rekap = [];
-
-
-
-        foreach ($criteriaList as $criteria) {
-
-            $rekap[$criteria->nama_kriteria] =
-                $assessments->sum(function ($assessment) use ($criteria) {
-
-                    return $assessment
-                        ->details
-                        ->where(
-                            'criteria_id',
-                            $criteria->id
-                        )
-                        ->sum('nilai');
-                });
-        }
+            $testSession
+            ->assessments
+            ->count();
 
 
 
 
-        $jumlahPanelis = $assessments->count();
+        $pdf = Pdf::loadView(
 
-
-
-        $totalSemua = $assessments->sum('total_nilai');
-
-
-
-        $rataRata = $jumlahPanelis > 0
-            ? round(
-                $totalSemua /
-                    ($jumlahPanelis * $criteriaList->count()),
-                2
-            )
-            : 0;
-
-
-
-        return view(
-
-            'admin.test_sessions.results',
+            'admin.test_sessions.pdf',
 
             compact(
 
                 'testSession',
+
                 'criteriaList',
-                'rekap',
-                'jumlahPanelis',
-                'totalSemua',
-                'rataRata'
+
+                'jumlahPanelis'
 
             )
 
         );
+
+
+
+        return $pdf->download(
+
+            'laporan-hasil-pengujian-'.$testSession->id.'.pdf'
+
+        );
+
     }
+
+
+
+
+
 
     public function exportExcel(TestSession $testSession)
     {
 
 
-        $testSession->load([
-
-            'sample.product',
-
-            'assessments.user',
-
-            'assessments.details.criteria'
-
-        ]);
-
-
-
         return Excel::download(
 
-            new \App\Exports\TestSessionResultExport($testSession),
+            new \App\Exports\TestResultExport($testSession),
 
-            'hasil_pengujian_' . $testSession->sample->nomor_sample . '.xlsx'
+            'laporan-hasil-pengujian-'.$testSession->id.'.xlsx'
 
         );
+
     }
 
 
 
 
-    /**
-     * Hapus sesi
-     */
+
+
+
     public function destroy(TestSession $testSession)
     {
+
+
+        $testSession->sessionUsers()->delete();
+
+
+        $testSession->assessments()->delete();
+
+
+        if($testSession->testResult)
+        {
+
+            $testSession->testResult->delete();
+
+        }
 
 
         $testSession->delete();
@@ -610,85 +880,15 @@ class TestSessionController extends Controller
             ->route('admin.test_sessions.index')
 
             ->with(
+
                 'success',
-                'Sesi berhasil dihapus'
+
+                'Sesi pengujian berhasil dihapus'
+
             );
+
     }
 
-   public function exportPdf(TestSession $testSession)
-{
-
-    $testSession->load([
-
-        'sample.product',
-
-        'assessments.user',
-
-        'assessments.details.criteria'
-
-    ]);
 
 
-    $pdf = Pdf::loadView(
-
-        'admin.test_sessions.pdf',
-
-        compact('testSession')
-
-    );
-
-
-    $pdf->setPaper(
-        'a4',
-        'landscape'
-    );
-
-
-    $filename = 
-        'Hasil_Uji_' .
-        $testSession->sample->nomor_sample .
-        '.pdf';
-
-
-
-    return response($pdf->output(), 200)
-
-        ->header(
-            'Content-Type',
-            'application/pdf'
-        )
-
-        ->header(
-            'Content-Disposition',
-            'attachment; filename="'.$filename.'"'
-        )
-
-        ->header(
-            'Cache-Control',
-            'no-cache, no-store, must-revalidate'
-        )
-
-        ->header(
-            'Pragma',
-            'no-cache'
-        )
-
-        ->header(
-            'Expires',
-            '0'
-        );
-
-}
-    public function downloadPdf(TestSession $testSession)
-    {
-        $pdf = Pdf::loadView(
-            'admin.test_sessions.pdf',
-            compact('testSession')
-        )
-            ->setPaper('a4', 'landscape');
-
-        return $pdf->download(
-            'hasil_pengujian_' . $testSession->sample->nomor_sample . '.pdf'
-        );
-    }
 }

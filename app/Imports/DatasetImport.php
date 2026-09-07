@@ -2,23 +2,18 @@
 
 namespace App\Imports;
 
-
 use App\Models\AssessmentTemplate;
 use App\Models\AssessmentSection;
 use App\Models\Criteria;
 use App\Models\CriteriaOption;
-
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
-
 
 
 class DatasetImport implements ToCollection
 {
 
-
     protected $productId;
-
 
 
     public function __construct($productId)
@@ -33,74 +28,84 @@ class DatasetImport implements ToCollection
     {
 
 
-
         /*
-        Template
+        |--------------------------------------------------------------------------
+        | TEMPLATE
+        |--------------------------------------------------------------------------
         */
 
-        $template = AssessmentTemplate::firstOrCreate(
 
-            [
-                'product_id'=>$this->productId
-            ],
+        $template = AssessmentTemplate::create([
 
-            [
-                'nama_template'=>'Template Organoleptik'
-            ]
+            'product_id' => $this->productId,
 
-        );
+            'nama_template' => 'Template Organoleptik'
 
+        ]);
 
-
-
-
-        /*
-        Section
-        */
-
-        $section = AssessmentSection::firstOrCreate(
-
-            [
-
-                'assessment_template_id'=>$template->id,
-
-                'nama_section'=>'Penilaian Sensori'
-
-            ],
-
-            [
-
-                'urutan'=>1
-
-            ]
-
-        );
 
 
 
 
 
         /*
-        Variabel kriteria aktif
+        |--------------------------------------------------------------------------
+        | SECTION
+        |--------------------------------------------------------------------------
         */
+
+
+        $section = AssessmentSection::create([
+
+            'assessment_template_id' => $template->id,
+
+            'nama_section' => 'Penilaian Organoleptik',
+
+            'urutan' => 1
+
+        ]);
+
+
+
+
+
 
         $criteria = null;
 
+        $urutan = 1;
 
 
-        foreach($rows->skip(2) as $row)
+
+
+
+
+        foreach($rows as $row)
         {
 
 
 
-            $kolomA = trim($row[0] ?? '');
+            /*
+            Ambil seluruh isi baris
+            */
 
-            $kolomB = trim($row[1] ?? '');
+            $data = collect($row)
+                ->filter(function($item){
+
+                    return trim((string)$item) !== '';
+
+                })
+                ->map(function($item){
+
+                    return trim((string)$item);
+
+                })
+                ->values();
 
 
 
 
-            if(empty($kolomA))
+
+            if($data->isEmpty())
             {
                 continue;
             }
@@ -108,15 +113,30 @@ class DatasetImport implements ToCollection
 
 
 
+
+
             /*
-            Jika kolom A adalah judul kriteria
-            contoh:
-            1 Kenampakan
-            2 Bau
+            |--------------------------------------------------------------------------
+            | DETEKSI PARAMETER
+            |
+            | Contoh:
+            | 1. Kenampakan
+            | 2. Bau
+            |--------------------------------------------------------------------------
             */
 
+
+            $kolomPertama = $data->first();
+
+
+
+
             if(
-                preg_match('/^[0-9]+\s+(.*)$/',$kolomA,$match)
+                preg_match(
+                    '/^\s*\d+[\.\)]\s*(.+)$/',
+                    $kolomPertama,
+                    $match
+                )
             )
             {
 
@@ -125,21 +145,97 @@ class DatasetImport implements ToCollection
 
 
 
-                $criteria = Criteria::create([
-
-                    'assessment_section_id'=>$section->id,
-
-                    'nama_kriteria'=>$namaKriteria,
-
-                    'urutan'=>1
-
-                ]);
+                /*
+                Abaikan judul/header
+                */
 
 
+                $blacklist = [
 
-                continue;
+                    'lembar',
+
+                    'penilaian',
+
+                    'panelis',
+
+                    'tanggal',
+
+                    'produk',
+
+                    'parameter',
+
+                    'kriteria',
+
+                    'nilai',
+
+                    'deskripsi'
+
+                ];
+
+
+
+                $skip = false;
+
+
+
+                foreach($blacklist as $kata)
+                {
+
+                    if(
+                        stripos(
+                            strtolower($namaKriteria),
+                            $kata
+                        ) !== false
+                    )
+                    {
+
+                        $skip = true;
+
+                        break;
+
+                    }
+
+                }
+
+
+
+
+                if(!$skip)
+                {
+
+
+                    $criteria = Criteria::create([
+
+
+                        'assessment_section_id'
+                            =>
+                        $section->id,
+
+
+                        'nama_kriteria'
+                            =>
+                        $namaKriteria,
+
+
+                        'urutan'
+                            =>
+                        $urutan++
+
+
+                    ]);
+
+
+
+                    continue;
+
+
+                }
+
 
             }
+
+
+
 
 
 
@@ -147,39 +243,97 @@ class DatasetImport implements ToCollection
 
 
             /*
-            Jika kolom B adalah nilai angka
-            berarti ini option
+            |--------------------------------------------------------------------------
+            | DETEKSI NILAI OPTION
+            |
+            | Contoh:
+            |
+            | Warna merah cerah | 9
+            |--------------------------------------------------------------------------
             */
 
 
-            if(
-                is_numeric($kolomB)
-                &&
-                $criteria
-            )
+
+            if($criteria)
             {
 
 
-                CriteriaOption::create([
+
+                $nilai = null;
 
 
-                    'criteria_id'=>$criteria->id,
+
+                foreach($data as $item)
+                {
 
 
-                    'nilai'=>(int)$kolomB,
+                    if(is_numeric($item))
+                    {
+
+                        $nilai = (int)$item;
+
+                        break;
+
+                    }
 
 
-                    'deskripsi'=>$kolomA
+                }
 
 
-                ]);
+
+
+
+
+                if($nilai !== null)
+                {
+
+
+
+                    $deskripsi = $data
+
+                        ->filter(function($item){
+
+                            return !is_numeric($item);
+
+                        })
+
+                        ->implode(' ');
+
+
+
+
+
+                    CriteriaOption::create([
+
+
+                        'criteria_id'
+                            =>
+                        $criteria->id,
+
+
+                        'nilai'
+                            =>
+                        $nilai,
+
+
+                        'deskripsi'
+                            =>
+                        $deskripsi
+
+
+                    ]);
+
+
+
+                }
+
 
             }
 
 
 
-
         }
+
 
 
     }

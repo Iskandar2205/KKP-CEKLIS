@@ -14,19 +14,19 @@ class TestSession extends Model
     use HasFactory;
 
 
-
     protected $fillable = [
 
-        'sample_id',
+    'sample_id',
 
-        'tanggal_pengujian',
+    'assessment_template_id',
 
-        'status',
+    'tanggal_pengujian',
 
-        'catatan',
+    'status',
 
-    ];
+    'catatan',
 
+ ];
 
 
 
@@ -36,8 +36,13 @@ class TestSession extends Model
             Sample::class
         );
     }
-
-
+   public function assessmentTemplate()
+{
+    return $this->belongsTo(
+        AssessmentTemplate::class,
+        'assessment_template_id'
+    );
+}
     public function assessments()
     {
         return $this->hasMany(
@@ -51,8 +56,13 @@ class TestSession extends Model
     {
 
         return $this->hasMany(SessionUser::class);
-
     }
 
+    public function testResult()
+    {
 
+        return $this->hasOne(
+            TestResult::class
+        );
+    }
 }

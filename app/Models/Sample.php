@@ -14,8 +14,6 @@ class Sample extends Model
     use HasFactory;
 
 
-
-
     protected $fillable = [
 
         'product_id',
@@ -27,8 +25,6 @@ class Sample extends Model
         'tanggal',
 
     ];
-
-
 
 
 
@@ -45,8 +41,6 @@ class Sample extends Model
         return $this->belongsTo(Product::class);
 
     }
-
-
 
 
 

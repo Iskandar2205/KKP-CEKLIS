@@ -11,30 +11,22 @@
 <style>
 
 body {
-
     font-family: Arial, sans-serif;
-    font-size: 12px;
-
+    font-size:12px;
 }
 
 
 .title {
-
     text-align:center;
     font-size:16px;
     font-weight:bold;
     margin-bottom:20px;
-
 }
-
 
 
 .info {
-
     margin-bottom:15px;
-
 }
-
 
 
 .result-table {
@@ -45,33 +37,27 @@ body {
 }
 
 
-
 .result-table th {
 
     background:#eeeeee;
-    font-weight:bold;
     border:1px solid black;
-    padding:6px;
+    padding:5px;
     text-align:center;
 
 }
-
 
 
 .result-table td {
 
     border:1px solid black;
-    padding:6px;
+    padding:5px;
     text-align:center;
 
 }
 
 
-
 .left {
-
     text-align:left;
-
 }
 
 
@@ -87,19 +73,12 @@ body {
 
 
 
-/* ===========================
-   TANDA TANGAN TANPA BORDER
-   =========================== */
-
-
 .signature-container {
 
     margin-top:90px;
     width:100%;
-    height:120px;
 
 }
-
 
 
 .signature-left {
@@ -111,7 +90,6 @@ body {
 }
 
 
-
 .signature-right {
 
     width:50%;
@@ -119,7 +97,6 @@ body {
     text-align:center;
 
 }
-
 
 
 </style>
@@ -132,14 +109,11 @@ body {
 <body>
 
 
-
 <div class="title">
 
 LAMPIRAN LAPORAN HASIL UJI
 
 </div>
-
-
 
 
 
@@ -151,21 +125,51 @@ Tanggal :
 
 <br>
 
-
 Nomor Sample :
-{{ $testSession->sample->nomor_sample }}
-
+{{ optional($testSession->sample)->nomor_sample }}
 
 <br>
 
-
 Jenis Produk :
-{{ $testSession->sample->product->nama_produk }}
+{{ optional(optional($testSession->sample)->product)->nama_produk }}
 
 
 </div>
 
 
+
+
+
+@php
+
+
+$criterias = 
+optional($testSession->assessmentTemplate)
+->criterias ?? collect();
+
+
+
+$total = 0;
+
+
+$jumlahCriteria = $criterias->count();
+
+
+
+$jumlahParameter=[];
+
+
+
+foreach($criterias as $criteria)
+{
+
+    $jumlahParameter[$criteria->nama_kriteria]=0;
+
+}
+
+
+
+@endphp
 
 
 
@@ -176,43 +180,33 @@ Jenis Produk :
 
 <tr>
 
+
 <th>No</th>
+
 
 <th>Panelis</th>
 
-<th>Kenampakan</th>
 
-<th>Bau</th>
 
-<th>Rasa</th>
+@foreach($criterias as $criteria)
 
-<th>Tekstur</th>
+
+<th>
+{{ $criteria->nama_kriteria }}
+</th>
+
+
+@endforeach
+
+
 
 <th>Jumlah</th>
 
+
 <th>Rata-rata</th>
 
+
 </tr>
-
-
-
-
-
-
-@php
-
-$total = 0;
-
-$kenampakan = 0;
-
-$bau = 0;
-
-$rasa = 0;
-
-$tekstur = 0;
-
-@endphp
-
 
 
 
@@ -222,7 +216,6 @@ $tekstur = 0;
 @foreach($testSession->assessments as $index=>$assessment)
 
 
-
 @php
 
 
@@ -230,33 +223,22 @@ $data=[];
 
 
 foreach($assessment->details as $detail)
-
 {
 
-    $data[$detail->criteria->nama_kriteria]
-    =
-    $detail->nilai;
+   $data[
+    $detail->criteria_id
+]
+=
+$detail->nilai;
 
 }
 
 
 
-$kenampakan += $data['Kenampakan'] ?? 0;
-
-$bau += $data['Bau'] ?? 0;
-
-$rasa += $data['Rasa'] ?? 0;
-
-$tekstur += $data['Tekstur'] ?? 0;
-
-
-$total += $assessment->total_nilai;
-
+$jumlah=0;
 
 
 @endphp
-
-
 
 
 
@@ -265,70 +247,81 @@ $total += $assessment->total_nilai;
 
 
 <td>
-
 {{ $index+1 }}
-
 </td>
 
 
 
 <td class="left">
 
-{{ $assessment->user->name }}
+{{ optional($assessment->user)->name }}
 
 </td>
 
 
 
 
+@foreach($criterias as $criteria)
+
+
+@php
+
+$nilai =
+$data[$criteria->id] ?? 0;
+
+
+$jumlah += $nilai;
+
+
+$jumlahParameter[$criteria->nama_kriteria]
++=
+$nilai;
+
+
+@endphp
+
+
+
 <td>
 
-{{ $data['Kenampakan'] ?? '-' }}
+{{ $nilai }}
+
+</td>
+
+
+@endforeach
+
+
+
+
+
+<td>
+
+{{ $jumlah }}
 
 </td>
 
 
 
-
 <td>
 
-{{ $data['Bau'] ?? '-' }}
+{{
 
-</td>
+$jumlahCriteria > 0
 
+?
 
+number_format(
+$jumlah/$jumlahCriteria,
+2
+)
 
+:
 
-<td>
+0
 
-{{ $data['Rasa'] ?? '-' }}
+}}
 
-</td>
-
-
-
-
-<td>
-
-{{ $data['Tekstur'] ?? '-' }}
-
-</td>
-
-
-
-
-<td>
-
-{{ $assessment->total_nilai }}
-
-</td>
-
-
-
-
-<td>
-
-{{ number_format($assessment->nilai_akhir,2) }}
 
 </td>
 
@@ -336,6 +329,13 @@ $total += $assessment->total_nilai;
 
 </tr>
 
+
+
+@php
+
+$total += $jumlah;
+
+@endphp
 
 
 
@@ -358,35 +358,26 @@ $total += $assessment->total_nilai;
 
 
 
+
+@foreach($criterias as $criteria)
+
+
 <td>
 
-{{ $kenampakan }}
+{{
+
+$jumlahParameter[$criteria->nama_kriteria]
+
+}}
+
 
 </td>
 
 
 
-<td>
-
-{{ $bau }}
-
-</td>
+@endforeach
 
 
-
-<td>
-
-{{ $rasa }}
-
-</td>
-
-
-
-<td>
-
-{{ $tekstur }}
-
-</td>
 
 
 
@@ -400,7 +391,19 @@ $total += $assessment->total_nilai;
 
 <td>
 
-{{ number_format($total/($testSession->assessments->count()*4),2) }}
+
+{{
+
+number_format(
+optional($testSession->testResult)
+->rata_rata_produk ?? 0,
+2
+
+)
+
+}}
+
+
 
 </td>
 
@@ -415,6 +418,167 @@ $total += $assessment->total_nilai;
 
 
 
+<br><br>
+
+
+
+
+
+<table class="result-table">
+
+
+<tr>
+
+<th colspan="2">
+PERHITUNGAN NILAI MUTU
+</th>
+
+</tr>
+
+
+
+
+<tr>
+
+<td class="left">
+Jumlah Panelis (n)
+</td>
+
+<td>
+{{ optional($testSession->testResult)->jumlah_panelis ?? 0 }}
+</td>
+
+</tr>
+
+
+
+
+<tr>
+
+<td class="left">
+Jumlah Parameter
+</td>
+
+<td>
+{{ optional($testSession->testResult)->jumlah_parameter ?? 0 }}
+</td>
+
+</tr>
+
+
+
+
+<tr>
+
+<td class="left">
+Konstanta (Z)
+</td>
+
+<td>
+{{ number_format(optional($testSession->testResult)->z_score ?? 0,3) }}
+</td>
+
+</tr>
+
+
+
+
+<tr>
+
+<td class="left">
+√n
+</td>
+
+<td>
+{{ number_format(optional($testSession->testResult)->akar_n ?? 0,3) }}
+</td>
+
+</tr>
+
+
+
+
+<tr>
+
+<td class="left">
+Varians (s²)
+</td>
+
+<td>
+{{ number_format(optional($testSession->testResult)->varians ?? 0,3) }}
+</td>
+
+</tr>
+
+
+
+
+<tr>
+
+<td class="left">
+Standar Deviasi (s)
+</td>
+
+<td>
+{{ number_format(optional($testSession->testResult)->standar_deviasi ?? 0,3) }}
+</td>
+
+</tr>
+
+
+
+
+<tr>
+
+<td class="left">
+Error
+</td>
+
+<td>
+{{ number_format(optional($testSession->testResult)->error ?? 0,3) }}
+</td>
+
+</tr>
+
+
+
+
+<tr>
+
+<td class="left">
+P Minimum
+</td>
+
+<td>
+{{ number_format(optional($testSession->testResult)->p_min ?? 0,3) }}
+</td>
+
+</tr>
+
+
+
+
+<tr>
+
+<td class="left">
+P Maximum
+</td>
+
+<td>
+{{ number_format(optional($testSession->testResult)->p_max ?? 0,3) }}
+</td>
+
+</tr>
+
+
+
+</table>
+
+
+
+
+<br><br>
+
 
 
 
@@ -427,7 +591,21 @@ NILAI AKHIR MUTU (P)
 <br><br>
 
 
-{{ number_format($total/($testSession->assessments->count()*4),2) }}
+
+{{
+
+number_format(
+
+optional($testSession->testResult)
+->nilai_mutu ?? 0,
+
+2
+
+)
+
+}}
+
+
 
 
 <br>
@@ -436,8 +614,23 @@ NILAI AKHIR MUTU (P)
 (DIBULATKAN 0.5)
 
 
-</div>
 
+<br><br>
+
+
+
+Kategori :
+
+{{
+
+optional($testSession->testResult)
+->kategori ?? '-'
+
+}}
+
+
+
+</div>
 
 
 
@@ -449,45 +642,35 @@ NILAI AKHIR MUTU (P)
 
 <div class="signature-left">
 
-
 Penyelia
-
 
 <br><br><br><br>
 
-
 (........................)
 
-
 </div>
-
 
 
 
 
 <div class="signature-right">
 
-
 Analis
-
 
 <br><br><br><br>
 
-
 (........................)
 
-
 </div>
 
 
 
 </div>
-
-
 
 
 
 
 </body>
+
 
 </html>

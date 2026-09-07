@@ -71,7 +71,39 @@
 
 
 
+{{-- TEMPLATE PENGUJIAN --}}
 
+<div class="mb-4">
+
+    <label class="block font-medium mb-2">
+        Template Pengujian
+    </label>
+
+
+    <select name="assessment_template_id"
+        class="w-full border rounded p-2">
+
+
+        <option value="">
+            -- Pilih Template Pengujian --
+        </option>
+
+
+        @foreach($templates as $template)
+
+        <option value="{{ $template->id }}">
+
+            {{ $template->nama_template }}
+
+        </option>
+
+        @endforeach
+
+
+    </select>
+
+
+</div>
 
 
 

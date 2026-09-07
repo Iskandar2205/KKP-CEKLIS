@@ -20,36 +20,31 @@ class AssessmentController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function create(TestSession $testSession)
-    {
+public function create(TestSession $testSession)
+{
 
+    $testSession->load([
 
-        $testSession->load([
+        'assessmentTemplate.sections.criterias.options',
+        'sample.product'
 
-            'sample.product.assessmentTemplates.sections.criterias.options'
-
-        ]);
-
-
-
-        $template = 
-            $testSession
-            ->sample
-            ->product
-            ->assessmentTemplates
-            ->first();
+    ]);
 
 
 
-        return view(
-                'panelis.assessments.create',
-                compact(
-                    'testSession',
-                    'template'
-                )
-            );
+    $template = $testSession->assessmentTemplate;
 
-    }
+
+
+    return view(
+        'panelis.assessments.create',
+        compact(
+            'testSession',
+            'template'
+        )
+    );
+
+}
 
 
 
